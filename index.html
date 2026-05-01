@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#07090e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="E7 Gear">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>E7 Gear Checker</title>
+<style>
+:root{--bg:#07090e;--panel:#0e1420;--panel2:#111825;--border:#1c2840;--accent:#00cfff;--gold:#ffcc44;--green:#00e676;--red:#ff4455;--orange:#ff9800;--purple:#b088ff;--muted:#354560;--text:#8aa8cc;--bright:#ddeeff;--sb:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;font-size:14px;display:flex;flex-direction:column;background-image:radial-gradient(ellipse at 0% 0%,#0a1830 0%,transparent 60%),radial-gradient(ellipse at 100% 100%,#0a0f20 0%,transparent 60%)}
+
+.app-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:10px 14px 9px;border-bottom:1px solid var(--border);background:rgba(7,9,14,.97);position:relative;z-index:20}
+.app-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--accent) 70%,transparent);opacity:.35}
+.logo{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--gold);letter-spacing:3px;text-shadow:0 0 14px rgba(255,204,68,.4)}
+.logo span{color:var(--accent)}
+
+.nav-tabs{flex-shrink:0;display:flex;border-bottom:1px solid var(--border);background:rgba(7,9,14,.9)}
+.nav-tab{flex:1;padding:9px 4px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none}
+.nav-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+
+.mode-toggle{display:flex;background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px;gap:2px}
+.mode-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;padding:4px 10px;border-radius:16px;border:none;cursor:pointer;transition:all .2s;color:var(--muted);background:transparent}
+.mode-btn.active{background:var(--gold);color:#070910;font-weight:700}
+
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:12px 13px calc(14px + var(--sb))}
+.tab-page{display:none}.tab-page.active{display:block}
+
+.slbl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--accent);margin:4px 0 8px;display:flex;align-items:center;gap:8px;opacity:.8}
+.slbl::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.ref-scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:10px}
+.ref-scroll::-webkit-scrollbar{display:none}
+.ref-card{flex-shrink:0;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:7px 9px;min-width:96px}
+.ref-name{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gold);margin-bottom:4px;letter-spacing:1px}
+.ref-row{display:flex;justify-content:space-between;font-size:10px;margin-top:2px}
+.ref-row .lb{color:var(--muted)}
+.rmin{color:#ff6677!important;font-weight:700}.rok{color:var(--orange)!important;font-weight:700}.rgd{color:#60c8ff!important;font-weight:700}.rmx{color:var(--green)!important;font-weight:700}
+
+.evaluator{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:13px;margin-top:4px}
+.sub-row{display:grid;grid-template-columns:1fr 86px 74px;align-items:center;gap:5px;margin-bottom:7px}
+select,input[type=number]{background:#0a1020;border:1px solid var(--border);border-radius:8px;color:var(--bright);font-family:'Exo 2',sans-serif;font-size:12px;padding:8px 9px;width:100%;outline:none;transition:border-color .2s;-moz-appearance:textfield;-webkit-appearance:none;appearance:none}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23354560'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:22px}
+select:focus,input:focus{border-color:var(--gold)}
+input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none}
+.verdict{text-align:center;font-family:'Share Tech Mono',monospace;font-size:8px;font-weight:700;padding:7px 3px;border-radius:7px;letter-spacing:.5px;line-height:1.3}
+.v-none{background:#111825;color:var(--muted)}
+.v-break{background:rgba(255,68,85,.14);color:var(--red);border:1px solid rgba(255,68,85,.3)}
+.v-maybe{background:rgba(255,152,0,.12);color:var(--orange);border:1px solid rgba(255,152,0,.25)}
+.v-keep{background:rgba(0,207,255,.09);color:#60d0ff;border:1px solid rgba(0,207,255,.2)}
+.v-good{background:rgba(0,230,118,.09);color:var(--green);border:1px solid rgba(0,230,118,.2)}
+.v-great{background:rgba(255,204,68,.12);color:var(--gold);border:1px solid rgba(255,204,68,.25)}
+
+.overall{margin-top:11px;border-top:1px solid var(--border);padding-top:11px}
+.overall-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.ov-lbl{font-size:9px;color:var(--muted);letter-spacing:2px;font-family:'Share Tech Mono',monospace}
+.overall-verdict{font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;letter-spacing:1px;padding:7px 13px;border-radius:8px;transition:all .3s;white-space:nowrap}
+.score-bar{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.score-fill{height:100%;border-radius:2px;transition:width .4s,background .4s;width:0%}
+
+.info-box{margin-top:10px;border-radius:10px;padding:11px 13px;display:none}
+.info-box.visible{display:block}
+.info-title{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;margin-bottom:8px}
+
+.role-box{background:rgba(0,207,255,.04);border:1px solid rgba(0,207,255,.14)}
+.role-box .info-title{color:var(--accent)}
+.role-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;font-size:12px;line-height:1.5}
+.role-tag{flex-shrink:0;padding:2px 8px;border-radius:4px;font-family:'Share Tech Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px}
+.role-dps{background:rgba(255,68,85,.15);color:var(--red);border:1px solid rgba(255,68,85,.3)}
+.role-tank{background:rgba(0,207,255,.12);color:var(--accent);border:1px solid rgba(0,207,255,.25)}
+.role-support{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.2)}
+.role-debuff{background:rgba(176,136,255,.13);color:var(--purple);border:1px solid rgba(176,136,255,.25)}
+.role-text{color:#8090b0}.role-text strong{color:#b0c0d8}
+
+.modgem-box{background:rgba(176,136,255,.05);border:1px solid rgba(176,136,255,.18)}
+.modgem-box .info-title{color:var(--purple)}
+.mg-item{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;font-size:12px;line-height:1.5}
+.mg-tag{flex-shrink:0;background:rgba(176,136,255,.14);color:var(--purple);border:1px solid rgba(176,136,255,.28);border-radius:4px;padding:2px 7px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;margin-top:1px}
+.mg-text{color:#8080a8}.mg-text strong{color:#b0b0d0}
+.mg-warn{margin-top:8px;padding-top:8px;border-top:1px solid rgba(176,136,255,.1);font-size:11px;color:#504870;line-height:1.5}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.leg{display:flex;align-items:center;gap:4px;font-size:10px}
+.leg-dot{width:7px;height:7px;border-radius:2px}
+
+.btn{padding:9px 14px;border-radius:8px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;cursor:pointer;transition:all .2s;border:none;display:block;width:100%;margin-top:8px;text-align:center}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn-ghost:active{border-color:var(--gold);color:var(--gold)}
+.btn-save{background:linear-gradient(135deg,var(--gold),#e8a800);color:#07090e;font-weight:700}
+.btn-save:active{opacity:.85}
+
+.build-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px}
+.build-empty .icon{font-size:36px;margin-bottom:10px;display:block}
+.build-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 13px;margin-bottom:10px;position:relative}
+.build-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:10px 10px 0 0}
+.bc-great::before{background:linear-gradient(90deg,var(--gold),transparent)}
+.bc-good::before{background:linear-gradient(90deg,var(--green),transparent)}
+.bc-keep::before{background:linear-gradient(90deg,var(--accent),transparent)}
+.bc-maybe::before{background:linear-gradient(90deg,var(--orange),transparent)}
+.bc-break::before{background:linear-gradient(90deg,var(--red),transparent)}
+.build-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px}
+.build-name{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--bright);letter-spacing:1px}
+.build-meta{font-size:10px;color:var(--muted);margin-top:2px}
+.build-verdict{font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:700;padding:4px 9px;border-radius:5px}
+.build-subs{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:5px}
+.build-sub{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:5px;padding:4px 8px;font-size:11px;display:flex;justify-content:space-between}
+.build-sub .sn{color:var(--muted)}.build-sub .sv{color:var(--bright);font-weight:600}
+.build-actions{display:flex;gap:6px;margin-top:8px}
+.btn-sm{flex:1;padding:7px 8px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;cursor:pointer;transition:all .2s;border:1px solid var(--border);background:transparent;color:var(--muted)}
+.btn-sm:active{opacity:.7}
+.btn-del{border-color:rgba(255,68,85,.2);color:var(--red)}
+.btn-load{border-color:rgba(0,207,255,.2);color:var(--accent)}
+.build-roles{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--panel2);border:1px solid var(--border);border-radius:16px 16px 0 0;padding:18px 16px calc(18px + var(--sb));width:100%;max-width:500px;transform:translateY(100%);transition:transform .3s}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-title{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:2px;margin-bottom:14px}
+.modal label{display:block;font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:5px;margin-top:12px}
+.modal input[type=text]{background:#0a1020;border:1px solid var(--border);border-radius:8px;color:var(--bright);font-family:'Exo 2',sans-serif;font-size:14px;padding:10px 12px;width:100%;outline:none}
+.modal input[type=text]:focus{border-color:var(--gold)}
+.slot-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.slot-btn{padding:8px 4px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.5px;cursor:pointer;text-align:center;transition:all .2s}
+.slot-btn.sel{border-color:var(--gold);color:var(--gold);background:rgba(255,204,68,.08)}
+.modal-btns{display:flex;gap:8px;margin-top:16px}
+.btn-confirm{flex:2;background:var(--gold);color:#070910;border:none;padding:11px;border-radius:8px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;font-weight:700;cursor:pointer}
+.btn-cancel{flex:1;background:transparent;border:1px solid var(--border);color:var(--muted);padding:11px;border-radius:8px;font-family:'Share Tech Mono',monospace;font-size:11px;cursor:pointer}
+
+.install-banner{display:none;background:var(--panel2);border-bottom:1px solid var(--border);padding:9px 13px;align-items:center;gap:9px;flex-shrink:0}
+.install-banner.show{display:flex}
+.install-text{flex:1;font-size:12px;color:var(--text)}.install-text strong{color:var(--gold)}
+.btn-install{background:var(--gold);color:#07090e;border:none;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;padding:7px 11px;cursor:pointer;white-space:nowrap}
+.btn-dismiss{background:transparent;border:none;color:var(--muted);font-size:17px;cursor:pointer;padding:0 3px;line-height:1}
+
+@keyframes pulse-gold{0%,100%{box-shadow:0 0 0 0 rgba(255,204,68,0)}50%{box-shadow:0 0 12px 2px rgba(255,204,68,.18)}}
+.v-great{animation:pulse-gold 2s infinite}
+</style>
+</head>
+<body>
+
+<div class="install-banner" id="install-banner">
+  <div class="install-text"><strong>Instalá la app</strong> — funciona sin internet</div>
+  <button class="btn-install" id="btn-install">INSTALAR</button>
+  <button class="btn-dismiss" onclick="document.getElementById('install-banner').classList.remove('show')">✕</button>
+</div>
+
+<div class="app-header">
+  <div class="logo">E7 <span>GEAR</span></div>
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="btn0"  onclick="setMode(0)">+0</button>
+    <button class="mode-btn"        id="btn9"  onclick="setMode(9)">+9</button>
+    <button class="mode-btn"        id="btn15" onclick="setMode(15)">+15</button>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showTab('eval',this)">⚙ EVALUAR</button>
+  <button class="nav-tab"        onclick="showTab('builds',this)">📦 BUILDS</button>
+  <button class="nav-tab"        onclick="showTab('ref',this)">📋 TABLA</button>
+</div>
+
+<div class="scroll-area">
+
+<!-- TAB EVALUAR -->
+<div class="tab-page active" id="tab-eval">
+  <div class="slbl">SUBSTATS DEL GEAR</div>
+  <div class="evaluator">
+    <div id="subs-container"></div>
+    <div class="overall">
+      <div class="overall-top">
+        <div>
+          <div class="ov-lbl">VEREDICTO</div>
+          <div class="overall-verdict v-none" id="overall-verdict">—</div>
+        </div>
+        <div class="score-bar"><div class="score-fill" id="score-fill"></div></div>
+      </div>
+    </div>
+    <div class="info-box role-box" id="role-box">
+      <div class="info-title">🎯 CONSEJO DE ROL</div>
+      <div id="role-content"></div>
+    </div>
+    <div class="info-box modgem-box" id="modgem-box">
+      <div class="info-title">💎 ASESOR MODGEM</div>
+      <div id="modgem-content"></div>
+      <div class="mg-warn">⚠ Solo vale en stats con 0–1 rolls (valor mínimo). Más rolls = retorno decreciente.</div>
+    </div>
+    <div class="legend">
+      <div class="leg"><div class="leg-dot" style="background:var(--red)"></div><span style="color:var(--red)">ROMPER</span></div>
+      <div class="leg"><div class="leg-dot" style="background:var(--orange)"></div><span style="color:var(--orange)">DUDOSO</span></div>
+      <div class="leg"><div class="leg-dot" style="background:#60d0ff"></div><span style="color:#60d0ff">SERVIBLE</span></div>
+      <div class="leg"><div class="leg-dot" style="background:var(--green)"></div><span style="color:var(--green)">GUARDAR</span></div>
+      <div class="leg"><div class="leg-dot" style="background:var(--gold)"></div><span style="color:var(--gold)">EXCELENTE</span></div>
+    </div>
+    <button class="btn btn-save" onclick="openSaveModal()">💾 GUARDAR BUILD</button>
+    <button class="btn btn-ghost" onclick="resetAll()">⟳ LIMPIAR</button>
+  </div>
+</div>
+
+<!-- TAB BUILDS -->
+<div class="tab-page" id="tab-builds">
+  <div class="slbl">BUILDS GUARDADAS</div>
+  <div id="builds-list"></div>
+</div>
+
+<!-- TAB REF -->
+<div class="tab-page" id="tab-ref">
+  <div id="ref-container"></div>
+</div>
+
+</div><!-- scroll-area -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">💾 GUARDAR BUILD</div>
+    <label>NOMBRE (opcional)</label>
+    <input type="text" id="modal-name" placeholder="Ej: Botas SPD tanque..." maxlength="40">
+    <label>SLOT DEL GEAR</label>
+    <div class="slot-btns" id="slot-btns">
+      <button class="slot-btn" data-slot="1" onclick="selSlot(this)">1 · ARMA</button>
+      <button class="slot-btn" data-slot="2" onclick="selSlot(this)">2 · CASCO</button>
+      <button class="slot-btn" data-slot="3" onclick="selSlot(this)">3 · ARMADURA</button>
+      <button class="slot-btn" data-slot="4" onclick="selSlot(this)">4 · COLGANTE</button>
+      <button class="slot-btn" data-slot="5" onclick="selSlot(this)">5 · ANILLO</button>
+      <button class="slot-btn" data-slot="6" onclick="selSlot(this)">6 · BOTAS</button>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">CANCELAR</button>
+      <button class="btn-confirm" onclick="confirmSave()">GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────
+const SD = {
+  0:[
+    {id:'none',lbl:'— vacío —',min:0,low:0,ok:0,good:0,max:0,unit:'',flat:false},
+    {id:'spd',lbl:'SPD',min:2,low:3,ok:3,good:4,max:4,unit:'',flat:false},
+    {id:'crate',lbl:'C.Rate %',min:3,low:4,ok:4,good:5,max:5,unit:'%',flat:false},
+    {id:'cdmg',lbl:'C.Dmg %',min:4,low:5,ok:6,good:6,max:7,unit:'%',flat:false},
+    {id:'atkp',lbl:'ATK %',min:4,low:5,ok:6,good:7,max:8,unit:'%',flat:false},
+    {id:'hpp',lbl:'HP %',min:4,low:5,ok:6,good:7,max:8,unit:'%',flat:false},
+    {id:'defp',lbl:'DEF %',min:4,low:5,ok:6,good:7,max:8,unit:'%',flat:false},
+    {id:'eff',lbl:'EFF %',min:4,low:5,ok:6,good:7,max:8,unit:'%',flat:false},
+    {id:'res',lbl:'RES %',min:4,low:5,ok:6,good:7,max:8,unit:'%',flat:false},
+    {id:'atkf',lbl:'ATK plano',min:33,low:38,ok:42,good:44,max:46,unit:'',flat:true},
+    {id:'deff',lbl:'DEF plano',min:28,low:30,ok:32,good:33,max:34,unit:'',flat:true},
+    {id:'hpf',lbl:'HP plano',min:158,low:175,ok:188,good:195,max:201,unit:'',flat:true},
+  ],
+  9:[
+    {id:'none',lbl:'— vacío —',min:0,low:0,ok:0,good:0,max:0,unit:'',flat:false},
+    {id:'spd',lbl:'SPD',min:6,low:9,ok:10,good:11,max:12,unit:'',flat:false},
+    {id:'crate',lbl:'C.Rate %',min:9,low:12,ok:13,good:14,max:15,unit:'%',flat:false},
+    {id:'cdmg',lbl:'C.Dmg %',min:12,low:16,ok:18,good:19,max:21,unit:'%',flat:false},
+    {id:'atkp',lbl:'ATK %',min:12,low:16,ok:18,good:20,max:24,unit:'%',flat:false},
+    {id:'hpp',lbl:'HP %',min:12,low:16,ok:18,good:20,max:24,unit:'%',flat:false},
+    {id:'defp',lbl:'DEF %',min:12,low:16,ok:18,good:20,max:24,unit:'%',flat:false},
+    {id:'eff',lbl:'EFF %',min:12,low:16,ok:18,good:20,max:24,unit:'%',flat:false},
+    {id:'res',lbl:'RES %',min:12,low:16,ok:18,good:20,max:24,unit:'%',flat:false},
+    {id:'atkf',lbl:'ATK plano',min:99,low:120,ok:130,good:135,max:138,unit:'',flat:true},
+    {id:'deff',lbl:'DEF plano',min:84,low:93,ok:96,good:99,max:102,unit:'',flat:true},
+    {id:'hpf',lbl:'HP plano',min:474,low:540,ok:560,good:575,max:603,unit:'',flat:true},
+  ],
+  15:[
+    {id:'none',lbl:'— vacío —',min:0,low:0,ok:0,good:0,max:0,unit:'',flat:false},
+    {id:'spd',lbl:'SPD',min:10,low:13,ok:15,good:17,max:20,unit:'',flat:false},
+    {id:'crate',lbl:'C.Rate %',min:15,low:18,ok:20,good:22,max:25,unit:'%',flat:false},
+    {id:'cdmg',lbl:'C.Dmg %',min:20,low:26,ok:28,good:31,max:35,unit:'%',flat:false},
+    {id:'atkp',lbl:'ATK %',min:20,low:28,ok:30,good:34,max:40,unit:'%',flat:false},
+    {id:'hpp',lbl:'HP %',min:20,low:28,ok:30,good:34,max:40,unit:'%',flat:false},
+    {id:'defp',lbl:'DEF %',min:20,low:28,ok:30,good:34,max:40,unit:'%',flat:false},
+    {id:'eff',lbl:'EFF %',min:20,low:28,ok:30,good:34,max:40,unit:'%',flat:false},
+    {id:'res',lbl:'RES %',min:20,low:28,ok:30,good:34,max:40,unit:'%',flat:false},
+    {id:'atkf',lbl:'ATK plano',min:165,low:200,ok:210,good:220,max:230,unit:'',flat:true},
+    {id:'deff',lbl:'DEF plano',min:140,low:155,ok:160,good:165,max:170,unit:'',flat:true},
+    {id:'hpf',lbl:'HP plano',min:790,low:900,ok:940,good:970,max:1005,unit:'',flat:true},
+  ]
+};
+
+const MGS={
+  spd:['ATK %','HP %','DEF %','C.Rate %','C.Dmg %'],
+  crate:['C.Dmg %','ATK %','SPD'],cdmg:['C.Rate %','ATK %','SPD'],
+  atkp:['C.Rate %','C.Dmg %','SPD','HP %'],hpp:['DEF %','SPD','RES %'],
+  defp:['HP %','SPD','RES %'],eff:['SPD','HP %'],res:['HP %','DEF %','SPD'],
+  atkf:['ATK %','C.Rate %','C.Dmg %'],deff:['DEF %','HP %'],hpf:['HP %','DEF %'],
+};
+
+const ROLES=[
+  {id:'dps_crit',tag:'DPS CRÍTICO',cls:'role-dps',
+   check:s=>has(s,'crate')&&has(s,'cdmg'),
+   desc:'Perfecto para <strong>atacantes crit</strong>. Héroes: Aramintha, Vildred, Karin, Vivian, Ran.'},
+  {id:'dps_atk',tag:'DPS ATK',cls:'role-dps',
+   check:s=>has(s,'atkp')&&(has(s,'crate')||has(s,'cdmg')),
+   desc:'Para <strong>nukers de ATK%</strong>. Funciona en Luna, Arby, Watcher Schuri.'},
+  {id:'hp_dps',tag:'DPS HP',cls:'role-dps',
+   check:s=>has(s,'hpp')&&(has(s,'crate')||has(s,'cdmg')),
+   desc:'Para héroes que <strong>pegan por HP propio</strong>: Fallen Cecilia, Elphelt, Muwi.'},
+  {id:'tank',tag:'TANQUE',cls:'role-tank',
+   check:s=>has(s,'hpp')&&has(s,'defp'),
+   desc:'<strong>Tanque puro</strong>. Crimson Armin, Roana, Ruele, Death Sentence Charlotte.'},
+  {id:'bruiser',tag:'BRUISER',cls:'role-tank',
+   check:s=>(has(s,'hpp')||has(s,'defp'))&&has(s,'spd'),
+   desc:'<strong>Tanque rápido</strong> que también puede golpear. Ideal en PvP: Alencia, Specter Tenebria.'},
+  {id:'support',tag:'SOPORTE',cls:'role-support',
+   check:s=>has(s,'spd')&&(has(s,'hpp')||has(s,'res')),
+   desc:'<strong>Healer o buffer</strong>. Destinar a Angelic Montmorancy, Elena, Diene, Tamarinne.'},
+  {id:'debuff',tag:'DEBUFFER',cls:'role-debuff',
+   check:s=>has(s,'eff')&&has(s,'spd'),
+   desc:'<strong>Debuffer / controller</strong>. Luluca, Seaside Bellona, Basar, Dizzy, Melissa.'},
+  {id:'eff_tank',tag:'TANQUE EFF',cls:'role-debuff',
+   check:s=>has(s,'eff')&&(has(s,'hpp')||has(s,'defp')),
+   desc:'Tanque con <strong>debuffs aterrizados</strong>. Funciona en Arowell, Mistychain.'},
+];
+
+function has(subs,id){return subs.some(s=>s.id===id&&s.score>=18)}
+
+// ── STATE ─────────────────────────────────────────────────
+let mode=0, selectedSlot=null;
+let builds=JSON.parse(localStorage.getItem('e7builds')||'[]');
+
+// ── HELPERS ───────────────────────────────────────────────
+function gS(){return SD[mode]}
+function gStat(id){return gS().find(s=>s.id===id)}
+const SNAMES=['','Arma','Casco','Armadura','Colgante','Anillo','Botas'];
+
+// ── TABS ──────────────────────────────────────────────────
+function showTab(name,el){
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(el)el.classList.add('active');
+  if(name==='builds')renderBuilds();
+  if(name==='ref')renderRef();
+}
+
+// ── MODE ──────────────────────────────────────────────────
+function setMode(m){
+  mode=m;
+  [0,9,15].forEach(n=>document.getElementById('btn'+n).classList.toggle('active',n===m));
+  buildRows(); resetAll();
+}
+
+// ── EVALUATE ──────────────────────────────────────────────
+function evaluate(sid,value){
+  const s=gStat(sid);
+  if(!s||sid==='none'||value===''||value===null)return null;
+  const v=parseFloat(value);
+  if(isNaN(v)||v<=0)return null;
+  if(mode===0){
+    if(s.flat){
+      if(v>=s.good)return{cls:'v-keep',label:'SUBIR',score:40,rollsOk:false};
+      return{cls:'v-break',label:'NO SUBIR',score:0,rollsOk:false};
+    }
+    if(v>=s.good)return{cls:'v-great',label:'SUBIR +9',score:100,rollsOk:true};
+    if(v>=s.ok)return{cls:'v-good',label:'SUBIR +9',score:75,rollsOk:true};
+    if(v>=s.low)return{cls:'v-keep',label:'+3 A VER',score:45,rollsOk:false};
+    if(v>=s.min)return{cls:'v-maybe',label:'DUDOSO',score:18,rollsOk:false};
+    return{cls:'v-break',label:'ROMPER',score:0,rollsOk:false};
+  }
+  if(s.flat){
+    if(v>=s.good)return{cls:'v-keep',label:'SERVIBLE',score:40,rollsOk:false};
+    if(v>=s.low)return{cls:'v-maybe',label:'DUDOSO',score:18,rollsOk:false};
+    return{cls:'v-break',label:'ROMPER',score:0,rollsOk:false};
+  }
+  if(v>=s.good)return{cls:'v-great',label:'EXCELENTE',score:100,rollsOk:true};
+  if(v>=s.ok)return{cls:'v-good',label:'GUARDAR',score:75,rollsOk:true};
+  if(v>=s.low)return{cls:'v-keep',label:'SERVIBLE',score:45,rollsOk:false};
+  if(v>=s.min)return{cls:'v-maybe',label:'DUDOSO',score:18,rollsOk:false};
+  return{cls:'v-break',label:'ROMPER',score:0,rollsOk:false};
+}
+
+// ── BUILD ROWS ────────────────────────────────────────────
+function buildRows(){
+  const c=document.getElementById('subs-container');
+  const ph=mode===0?'valor inicial':`valor a +${mode}`;
+  c.innerHTML='';
+  for(let i=0;i<4;i++){
+    const d=document.createElement('div');
+    d.className='sub-row';
+    d.innerHTML=`
+      <select id="stat-${i}" onchange="recalc()">
+        ${gS().map(s=>`<option value="${s.id}">${s.lbl}</option>`).join('')}
+      </select>
+      <input type="number" id="val-${i}" placeholder="${ph}" min="0" inputmode="decimal" oninput="recalc()"/>
+      <div class="verdict v-none" id="verdict-${i}">—</div>`;
+    c.appendChild(d);
+  }
+}
+
+// ── RECALC ────────────────────────────────────────────────
+function recalc(){
+  let total=0,count=0;
+  const results=[],selected=[];
+  for(let i=0;i<4;i++){
+    const sid=document.getElementById(`stat-${i}`).value;
+    const val=document.getElementById(`val-${i}`).value;
+    const vEl=document.getElementById(`verdict-${i}`);
+    const r=evaluate(sid,val);
+    results.push({sid,val,r,score:r?r.score:0,id:sid});
+    selected.push(sid);
+    if(!r){vEl.className='verdict v-none';vEl.textContent='—';continue;}
+    vEl.className=`verdict ${r.cls}`;vEl.textContent=r.label;
+    total+=r.score;count++;
+  }
+  const ov=document.getElementById('overall-verdict');
+  const fill=document.getElementById('score-fill');
+  if(count===0){
+    ov.className='overall-verdict v-none';ov.textContent='—';fill.style.width='0%';
+    hide('role-box');hide('modgem-box');return;
+  }
+  const avg=total/count;
+  fill.style.width=Math.min(100,avg)+'%';
+  if(mode===0){
+    if(avg>=75){set(ov,'v-great','⭐ SUBIR A +9');fill.style.background='var(--gold)'}
+    else if(avg>=50){set(ov,'v-good','✅ SUBIR A +9');fill.style.background='var(--green)'}
+    else if(avg>=30){set(ov,'v-keep','🔵 SUBIR A +3');fill.style.background='#60d0ff'}
+    else if(avg>=12){set(ov,'v-maybe','🟡 DUDOSO');fill.style.background='var(--orange)'}
+    else{set(ov,'v-break','❌ ROMPER YA');fill.style.background='var(--red)'}
+  }else{
+    if(avg>=85){set(ov,'v-great','⭐ EXCELENTE');fill.style.background='var(--gold)'}
+    else if(avg>=60){set(ov,'v-good','✅ GUARDAR');fill.style.background='var(--green)'}
+    else if(avg>=35){set(ov,'v-keep','🔵 EVALUAR');fill.style.background='#60d0ff'}
+    else if(avg>=15){set(ov,'v-maybe','🟡 DUDOSO');fill.style.background='var(--orange)'}
+    else{set(ov,'v-break','❌ ROMPER');fill.style.background='var(--red)'}
+  }
+  // roles
+  const matched=ROLES.filter(r=>r.check(results.filter(x=>x.r&&x.sid!=='none')));
+  if(matched.length>0&&avg>=12){
+    document.getElementById('role-content').innerHTML=matched.slice(0,3).map(r=>
+      `<div class="role-item"><span class="role-tag ${r.cls}">${r.tag}</span><span class="role-text">${r.desc}</span></div>`
+    ).join('');
+    show('role-box');
+  }else hide('role-box');
+  // modgem
+  if(mode===0){hide('modgem-box');return;}
+  const bad=results.filter(r=>r.r&&r.r.score<=40&&r.sid!=='none');
+  const good=results.filter(r=>r.r&&r.r.score>=75&&r.sid!=='none');
+  if(bad.length>0&&good.length>=2){
+    const albl=selected.filter(id=>id!=='none').map(id=>gStat(id)?.lbl).filter(Boolean);
+    let html='';
+    bad.forEach(b=>{
+      const suggs=(MGS[b.sid]||[]).filter(l=>!albl.includes(l));
+      html+=`<div class="mg-item"><span class="mg-tag">${gStat(b.sid)?.lbl||b.sid}</span>
+      <span class="mg-text">${b.r.score<=20?'✅ Vale modgem — pocos rolls.':'⚠ Varios rolls — retorno bajo.'}<br>
+      ${suggs.length?`Cambiar por: <strong>${suggs.slice(0,3).join(' / ')}</strong>`:'Sin reemplazo claro.'}</span></div>`;
+    });
+    document.getElementById('modgem-content').innerHTML=html||'<span style="color:#507090;font-size:12px">Sin sugerencias.</span>';
+    show('modgem-box');
+  }else hide('modgem-box');
+}
+
+function set(el,cls,txt){el.className=`overall-verdict ${cls}`;el.textContent=txt}
+function show(id){document.getElementById(id).classList.add('visible')}
+function hide(id){document.getElementById(id).classList.remove('visible')}
+
+// ── RESET ─────────────────────────────────────────────────
+function resetAll(){
+  for(let i=0;i<4;i++){
+    const s=document.getElementById(`stat-${i}`);
+    const v=document.getElementById(`val-${i}`);
+    const d=document.getElementById(`verdict-${i}`);
+    if(s)s.value='none';if(v)v.value='';if(d){d.className='verdict v-none';d.textContent='—';}
+  }
+  set(document.getElementById('overall-verdict'),'v-none','—');
+  document.getElementById('score-fill').style.width='0%';
+  hide('role-box');hide('modgem-box');
+}
+
+// ── SAVE MODAL ────────────────────────────────────────────
+function openSaveModal(){
+  const ok=[...Array(4)].some((_,i)=>{
+    const s=document.getElementById(`stat-${i}`)?.value;
+    const v=document.getElementById(`val-${i}`)?.value;
+    return s&&s!=='none'&&v;
+  });
+  if(!ok){alert('Ingresá al menos 1 substat antes de guardar.');return;}
+  document.getElementById('modal-name').value='';
+  selectedSlot=null;
+  document.querySelectorAll('.slot-btn').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open')}
+function selSlot(el){
+  document.querySelectorAll('.slot-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');selectedSlot=parseInt(el.dataset.slot);
+}
+function confirmSave(){
+  const name=document.getElementById('modal-name').value.trim()||'Gear sin nombre';
+  const subs=[];
+  for(let i=0;i<4;i++){
+    const sid=document.getElementById(`stat-${i}`)?.value;
+    const val=document.getElementById(`val-${i}`)?.value;
+    if(sid&&sid!=='none'&&val){
+      const r=evaluate(sid,val);
+      subs.push({id:sid,lbl:gStat(sid)?.lbl||sid,val,verdict:r?.label||'—',cls:r?.cls||'v-none',score:r?.score||0});
+    }
+  }
+  if(subs.length===0){closeModal();return;}
+  const avg=subs.reduce((a,s)=>a+s.score,0)/subs.length;
+  let verdict='—',vcls='v-none',bcls='bc-maybe';
+  if(avg>=85){verdict='⭐ EXCELENTE';vcls='v-great';bcls='bc-great';}
+  else if(avg>=60){verdict='✅ GUARDAR';vcls='v-good';bcls='bc-good';}
+  else if(avg>=35){verdict='🔵 EVALUAR';vcls='v-keep';bcls='bc-keep';}
+  else if(avg>=15){verdict='🟡 DUDOSO';vcls='v-maybe';bcls='bc-maybe';}
+  else{verdict='❌ ROMPER';vcls='v-break';bcls='bc-break';}
+  const roles=ROLES.filter(r=>r.check(subs)).slice(0,2).map(r=>({tag:r.tag,cls:r.cls}));
+  builds.unshift({id:Date.now(),name,slot:selectedSlot,mode,subs,verdict,vcls,bcls,roles,savedAt:new Date().toLocaleDateString('es-AR')});
+  if(builds.length>60)builds.pop();
+  localStorage.setItem('e7builds',JSON.stringify(builds));
+  closeModal();
+  showTab('builds',document.querySelectorAll('.nav-tab')[1]);
+}
+
+// ── RENDER BUILDS ─────────────────────────────────────────
+function renderBuilds(){
+  const c=document.getElementById('builds-list');
+  if(builds.length===0){
+    c.innerHTML=`<div class="build-empty"><span class="icon">📦</span>No hay builds guardadas.<br>Evaluá un gear y tocá "Guardar Build".</div>`;return;
+  }
+  c.innerHTML=builds.map(b=>`
+    <div class="build-card ${b.bcls}">
+      <div class="build-header">
+        <div>
+          <div class="build-name">${b.name}</div>
+          <div class="build-meta">${b.slot?`Slot ${b.slot} · ${SNAMES[b.slot]} · `:''}+${b.mode} · ${b.savedAt}</div>
+        </div>
+        <div class="build-verdict ${b.vcls}">${b.verdict}</div>
+      </div>
+      <div class="build-subs">
+        ${b.subs.map(s=>`<div class="build-sub"><span class="sn">${s.lbl}</span><span class="sv">${s.val}</span></div>`).join('')}
+      </div>
+      ${b.roles&&b.roles.length?`<div class="build-roles">${b.roles.map(r=>`<span class="role-tag ${r.cls}" style="font-size:8px;padding:2px 6px">${r.tag}</span>`).join('')}</div>`:''}
+      <div class="build-actions">
+        <button class="btn-sm btn-load" onclick="loadBuild(${b.id})">📥 CARGAR</button>
+        <button class="btn-sm btn-del"  onclick="deleteBuild(${b.id})">🗑 BORRAR</button>
+      </div>
+    </div>`).join('');
+}
+function deleteBuild(id){builds=builds.filter(b=>b.id!==id);localStorage.setItem('e7builds',JSON.stringify(builds));renderBuilds()}
+function loadBuild(id){
+  const b=builds.find(b=>b.id===id);if(!b)return;
+  setMode(b.mode);
+  setTimeout(()=>{
+    b.subs.forEach((s,i)=>{
+      const sel=document.getElementById(`stat-${i}`);
+      const inp=document.getElementById(`val-${i}`);
+      if(sel)sel.value=s.id;if(inp)inp.value=s.val;
+    });
+    recalc();
+    showTab('eval',document.querySelectorAll('.nav-tab')[0]);
+  },60);
+}
+
+// ── RENDER REF ────────────────────────────────────────────
+function renderRef(){
+  const c=document.getElementById('ref-container');
+  const ml={0:'A +0 · 1 roll inicial',9:'A +9 · 3 rolls',15:'A +15 · 5 rolls'};
+  let html='';
+  [0,9,15].forEach(m=>{
+    html+=`<div class="slbl" style="margin-top:${m?14:0}px">${ml[m]}</div><div class="ref-scroll">`;
+    SD[m].filter(s=>s.id!=='none').forEach(s=>{
+      html+=`<div class="ref-card"><div class="ref-name">${s.lbl}</div>
+        <div class="ref-row"><span class="lb">Malo</span><span class="rmin">${s.min}${s.unit}</span></div>
+        <div class="ref-row"><span class="lb">Ok</span><span class="rok">${s.low}${s.unit}</span></div>
+        <div class="ref-row"><span class="lb">Bueno</span><span class="rgd">${s.good}${s.unit}</span></div>
+        <div class="ref-row"><span class="lb">Máx</span><span class="rmx">${s.max}${s.unit}</span></div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  c.innerHTML=html;
+}
+
+// ── PWA ───────────────────────────────────────────────────
+let dp=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;document.getElementById('install-banner').classList.add('show')});
+document.getElementById('btn-install').addEventListener('click',async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;document.getElementById('install-banner').classList.remove('show')});
+document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('modal-overlay'))closeModal()});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+// ── INIT ──────────────────────────────────────────────────
+buildRows();
+</script>
+</body>
+</html>
