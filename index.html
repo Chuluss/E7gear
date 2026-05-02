@@ -11,68 +11,59 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
 <title>E7 Gear Checker</title>
+<script src="heroes.js"></script>
 <style>
 :root{--bg:#07090e;--panel:#0e1420;--panel2:#111825;--border:#1c2840;--accent:#00cfff;--gold:#ffcc44;--green:#00e676;--red:#ff4455;--orange:#ff9800;--purple:#b088ff;--muted:#354560;--text:#8aa8cc;--bright:#ddeeff;--sb:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden}
 body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;font-size:14px;display:flex;flex-direction:column;background-image:radial-gradient(ellipse at 0% 0%,#0a1830 0%,transparent 60%),radial-gradient(ellipse at 100% 100%,#0a0f20 0%,transparent 60%)}
-
 /* HEADER */
 .app-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:10px 14px 9px;border-bottom:1px solid var(--border);background:rgba(7,9,14,.97);position:relative;z-index:20}
 .app-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold) 30%,var(--accent) 70%,transparent);opacity:.35}
 .logo{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--gold);letter-spacing:3px;text-shadow:0 0 14px rgba(255,204,68,.4)}
 .logo span{color:var(--accent)}
-
 /* MODE SCROLL */
 .mode-scroll{flex-shrink:0;display:flex;gap:5px;padding:8px 13px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border);background:rgba(7,9,14,.9)}
 .mode-scroll::-webkit-scrollbar{display:none}
 .mode-btn{flex-shrink:0;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;padding:5px 12px;border-radius:16px;border:1px solid var(--border);cursor:pointer;transition:all .2s;color:var(--muted);background:transparent;white-space:nowrap}
 .mode-btn.active{background:var(--gold);color:#070910;font-weight:700;border-color:var(--gold)}
-
-/* NAV TABS */
+/* NAV */
 .nav-tabs{flex-shrink:0;display:flex;border-bottom:1px solid var(--border);background:rgba(7,9,14,.9)}
-.nav-tab{flex:1;padding:9px 4px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none}
+.nav-tab{flex:1;padding:9px 2px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none}
 .nav-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
-
 /* SCROLL */
 .scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:12px 13px calc(14px + var(--sb))}
 .tab-page{display:none}.tab-page.active{display:block}
-
-/* SECTION LABEL */
+/* LABELS */
 .slbl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--accent);margin:4px 0 8px;display:flex;align-items:center;gap:8px;opacity:.8}
 .slbl::after{content:'';flex:1;height:1px;background:var(--border)}
-
 /* SLOT SELECTOR */
 .slot-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
-.slot-pick{padding:8px 4px;border-radius:8px;border:1px solid var(--border);background:var(--panel);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.5px;cursor:pointer;text-align:center;transition:all .2s;line-height:1.4}
+.slot-pick{padding:8px 4px;border-radius:8px;border:1px solid var(--border);background:var(--panel);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:9px;cursor:pointer;text-align:center;transition:all .2s;line-height:1.4}
 .slot-pick.active{border-color:var(--gold);color:var(--gold);background:rgba(255,204,68,.07)}
-.slot-pick .slot-num{font-size:14px;display:block;margin-bottom:2px}
-
-/* MAIN STAT */
-.main-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;padding:10px 12px;background:var(--panel);border:1px solid var(--border);border-radius:10px}
-.main-stat-row.hidden{display:none}
-.ms-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:5px}
-.ms-stat{font-size:12px;color:var(--bright);font-weight:600}
-.ms-level{font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 10px;border-radius:5px;text-align:center;font-weight:700}
-.ms-lv-unknown{background:var(--panel2);color:var(--muted)}
-.ms-lv-low{background:rgba(255,68,85,.12);color:var(--red);border:1px solid rgba(255,68,85,.25)}
-.ms-lv-mid{background:rgba(255,152,0,.12);color:var(--orange);border:1px solid rgba(255,152,0,.25)}
-.ms-lv-high{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.2)}
-.ms-lv-max{background:rgba(255,204,68,.12);color:var(--gold);border:1px solid rgba(255,204,68,.25)}
-
-/* REF TABLE */
-.ref-scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:10px}
+.slot-pick .sn{font-size:14px;display:block;margin-bottom:2px}
+/* GEAR INFO */
+.gear-info-row{display:none;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;padding:10px 12px;background:var(--panel);border:1px solid var(--border);border-radius:10px}
+.gear-info-row.show{display:grid}
+.gi-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:5px}
+.lv-badge{font-family:'Share Tech Mono',monospace;font-size:11px;padding:3px 8px;border-radius:5px;font-weight:700;display:inline-block;margin-top:4px}
+.lv-72{background:rgba(255,152,0,.12);color:var(--orange);border:1px solid rgba(255,152,0,.25)}
+.lv-78{background:rgba(0,207,255,.1);color:#60d0ff;border:1px solid rgba(0,207,255,.2)}
+.lv-85{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.2)}
+.lv-88{background:rgba(255,204,68,.12);color:var(--gold);border:1px solid rgba(255,204,68,.25)}
+.lv-90{background:rgba(176,136,255,.13);color:var(--purple);border:1px solid rgba(176,136,255,.25)}
+/* REF */
+.ref-scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none;margin-bottom:10px}
 .ref-scroll::-webkit-scrollbar{display:none}
 .ref-card{flex-shrink:0;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:7px 9px;min-width:96px}
 .ref-name{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--gold);margin-bottom:4px;letter-spacing:1px}
 .ref-row{display:flex;justify-content:space-between;font-size:10px;margin-top:2px}
 .ref-row .lb{color:var(--muted)}
 .rmin{color:#ff6677!important;font-weight:700}.rok{color:var(--orange)!important;font-weight:700}.rgd{color:#60c8ff!important;font-weight:700}.rmx{color:var(--green)!important;font-weight:700}
-
 /* EVALUATOR */
 .evaluator{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:13px;margin-top:4px}
 .sub-row{display:grid;grid-template-columns:1fr 86px 74px;align-items:center;gap:5px;margin-bottom:7px}
-select,input[type=number]{background:#0a1020;border:1px solid var(--border);border-radius:8px;color:var(--bright);font-family:'Exo 2',sans-serif;font-size:12px;padding:8px 9px;width:100%;outline:none;transition:border-color .2s;-moz-appearance:textfield;-webkit-appearance:none;appearance:none}
+select,input[type=number],input[type=text]{background:#0a1020;border:1px solid var(--border);border-radius:8px;color:var(--bright);font-family:'Exo 2',sans-serif;font-size:12px;padding:8px 9px;width:100%;outline:none;transition:border-color .2s;-moz-appearance:textfield;-webkit-appearance:none;appearance:none}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23354560'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:22px}
 select:focus,input:focus{border-color:var(--gold)}
 input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none}
@@ -83,7 +74,6 @@ input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appear
 .v-keep{background:rgba(0,207,255,.09);color:#60d0ff;border:1px solid rgba(0,207,255,.2)}
 .v-good{background:rgba(0,230,118,.09);color:var(--green);border:1px solid rgba(0,230,118,.2)}
 .v-great{background:rgba(255,204,68,.12);color:var(--gold);border:1px solid rgba(255,204,68,.25)}
-
 /* OVERALL */
 .overall{margin-top:11px;border-top:1px solid var(--border);padding-top:11px}
 .overall-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
@@ -91,7 +81,6 @@ input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appear
 .overall-verdict{font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;letter-spacing:1px;padding:7px 13px;border-radius:8px;transition:all .3s;white-space:nowrap}
 .score-bar{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
 .score-fill{height:100%;border-radius:2px;transition:width .4s,background .4s;width:0%}
-
 /* INFO BOXES */
 .info-box{margin-top:10px;border-radius:10px;padding:11px 13px;display:none}
 .info-box.visible{display:block}
@@ -105,17 +94,16 @@ input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appear
 .role-support{background:rgba(0,230,118,.1);color:var(--green);border:1px solid rgba(0,230,118,.2)}
 .role-debuff{background:rgba(176,136,255,.13);color:var(--purple);border:1px solid rgba(176,136,255,.25)}
 .role-text{color:#8090b0}.role-text strong{color:#b0c0d8}
-
-/* RESET-TO-0 BOX */
+/* RESET BOX */
 .reset-box{background:rgba(176,136,255,.05);border:1px solid rgba(176,136,255,.2)}
 .reset-box .info-title{color:var(--purple)}
 .reset-content{font-size:12px;line-height:1.6;color:#8080a8}
+.reset-content p{margin-bottom:4px}
 .reset-content strong{color:#c0b0e0}
 .reset-verdict{display:inline-block;margin-top:8px;padding:5px 12px;border-radius:5px;font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px}
 .rv-yes{background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.25)}
 .rv-no{background:rgba(255,68,85,.12);color:var(--red);border:1px solid rgba(255,68,85,.25)}
 .rv-maybe{background:rgba(255,152,0,.12);color:var(--orange);border:1px solid rgba(255,152,0,.25)}
-
 /* MODGEM */
 .modgem-box{background:rgba(176,136,255,.05);border:1px solid rgba(176,136,255,.18)}
 .modgem-box .info-title{color:var(--purple)}
@@ -123,20 +111,22 @@ input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appear
 .mg-tag{flex-shrink:0;background:rgba(176,136,255,.14);color:var(--purple);border:1px solid rgba(176,136,255,.28);border-radius:4px;padding:2px 7px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;margin-top:1px}
 .mg-text{color:#8080a8}.mg-text strong{color:#b0b0d0}
 .mg-warn{margin-top:8px;padding-top:8px;border-top:1px solid rgba(176,136,255,.1);font-size:11px;color:#504870;line-height:1.5}
-
+/* UPGRADE BOX */
+.upgrade-box{background:rgba(0,230,118,.04);border:1px solid rgba(0,230,118,.15)}
+.upgrade-box .info-title{color:var(--green)}
+.upgrade-item{font-size:12px;line-height:1.6;color:#6090a0;margin-bottom:5px}
+.upgrade-item strong{color:#90d0b0}
 /* LEGEND */
 .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .leg{display:flex;align-items:center;gap:4px;font-size:10px}
 .leg-dot{width:7px;height:7px;border-radius:2px}
-
 /* BUTTONS */
 .btn{padding:9px 14px;border-radius:8px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;cursor:pointer;transition:all .2s;border:none;display:block;width:100%;margin-top:8px;text-align:center}
 .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
 .btn-ghost:active{border-color:var(--gold);color:var(--gold)}
 .btn-save{background:linear-gradient(135deg,var(--gold),#e8a800);color:#07090e;font-weight:700}
 .btn-save:active{opacity:.85}
-
-/* BUILDS */
+/* BUILDS TAB */
 .build-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px}
 .build-empty .icon{font-size:36px;margin-bottom:10px;display:block}
 .build-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 13px;margin-bottom:10px;position:relative}
@@ -149,6 +139,7 @@ input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appear
 .build-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px}
 .build-name{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--bright);letter-spacing:1px}
 .build-meta{font-size:10px;color:var(--muted);margin-top:2px}
+.build-hero{font-size:11px;color:var(--gold);margin-top:3px}
 .build-verdict{font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:700;padding:4px 9px;border-radius:5px}
 .build-subs{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:5px}
 .build-sub{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:5px;padding:4px 8px;font-size:11px;display:flex;justify-content:space-between}
@@ -158,46 +149,77 @@ input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appear
 .btn-sm:active{opacity:.7}
 .btn-del{border-color:rgba(255,68,85,.2);color:var(--red)}
 .btn-load{border-color:rgba(0,207,255,.2);color:var(--accent)}
+.btn-assign{border-color:rgba(255,204,68,.2);color:var(--gold)}
 .build-roles{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-
+/* HEROES TAB */
+.hero-filters{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap}
+.filter-btn{padding:5px 10px;border-radius:14px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.filter-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,207,255,.08)}
+.filter-btn.top-active{border-color:var(--gold);color:var(--gold);background:rgba(255,204,68,.08)}
+.search-input{background:#0a1020;border:1px solid var(--border);border-radius:8px;color:var(--bright);font-family:'Exo 2',sans-serif;font-size:13px;padding:9px 12px;width:100%;outline:none}
+.search-input:focus{border-color:var(--accent)}
+.hero-grid{display:flex;flex-direction:column;gap:8px}
+.hero-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:11px 13px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .2s}
+.hero-card:active{border-color:var(--gold)}
+.hero-card.top-hero{border-left:3px solid var(--gold)}
+.hero-card.has-gear{border-left:3px solid var(--green)}
+.hero-top-badge{position:absolute;top:8px;right:8px;font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--gold);background:rgba(255,204,68,.1);border:1px solid rgba(255,204,68,.25);padding:2px 6px;border-radius:3px;letter-spacing:1px}
+.hero-name{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--bright);margin-bottom:4px;letter-spacing:.5px}
+.hero-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.hero-el{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px}
+.el-fire{background:rgba(255,100,50,.15);color:#ff7744;border:1px solid rgba(255,100,50,.3)}
+.el-ice{background:rgba(100,180,255,.12);color:#60b8ff;border:1px solid rgba(100,180,255,.25)}
+.el-earth{background:rgba(80,200,100,.12);color:#60cc70;border:1px solid rgba(80,200,100,.25)}
+.el-light{background:rgba(255,230,100,.12);color:#ffe060;border:1px solid rgba(255,230,100,.25)}
+.el-dark{background:rgba(160,100,255,.13);color:#c080ff;border:1px solid rgba(160,100,255,.28)}
+.hero-stars{color:var(--gold);font-size:10px;letter-spacing:-1px}
+.hero-ml{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--purple);background:rgba(176,136,255,.12);border:1px solid rgba(176,136,255,.25);padding:2px 6px;border-radius:3px}
+.hero-sets{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}
+.set-chip{font-family:'Share Tech Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8090b0}
+.hero-stats-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}
+.stat-chip{font-size:10px;padding:2px 6px;border-radius:3px}
+.sc-high{background:rgba(255,204,68,.12);color:var(--gold);border:1px solid rgba(255,204,68,.2)}
+.sc-mid{background:rgba(0,207,255,.08);color:#60c0e0;border:1px solid rgba(0,207,255,.15)}
+.hero-note{font-size:11px;color:#6080a0;line-height:1.4;margin-bottom:5px}
+.hero-note.special{color:#c0a060;background:rgba(255,180,50,.06);border:1px solid rgba(255,180,50,.12);border-radius:5px;padding:4px 8px}
+.hero-gear-assigned{font-size:11px;color:var(--green);margin-top:4px}
+.hero-gear-assigned span{color:#40a060}
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
 .modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:var(--panel2);border:1px solid var(--border);border-radius:16px 16px 0 0;padding:18px 16px calc(18px + var(--sb));width:100%;max-width:500px;transform:translateY(100%);transition:transform .3s}
+.modal{background:var(--panel2);border:1px solid var(--border);border-radius:16px 16px 0 0;padding:18px 16px calc(18px + var(--sb));width:100%;max-width:500px;transform:translateY(100%);transition:transform .3s;max-height:85vh;overflow-y:auto}
 .modal-overlay.open .modal{transform:translateY(0)}
 .modal-title{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:2px;margin-bottom:14px}
 .modal label{display:block;font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:5px;margin-top:12px}
-.modal input[type=text]{background:#0a1020;border:1px solid var(--border);border-radius:8px;color:var(--bright);font-family:'Exo 2',sans-serif;font-size:14px;padding:10px 12px;width:100%;outline:none}
-.modal input[type=text]:focus{border-color:var(--gold)}
 .modal-btns{display:flex;gap:8px;margin-top:16px}
 .btn-confirm{flex:2;background:var(--gold);color:#070910;border:none;padding:11px;border-radius:8px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;font-weight:700;cursor:pointer}
 .btn-cancel{flex:1;background:transparent;border:1px solid var(--border);color:var(--muted);padding:11px;border-radius:8px;font-family:'Share Tech Mono',monospace;font-size:11px;cursor:pointer}
-
+.hero-select-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:250px;overflow-y:auto;padding:4px}
+.hero-sel-btn{padding:8px;border-radius:7px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-family:'Exo 2',sans-serif;font-size:11px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.3}
+.hero-sel-btn:active,.hero-sel-btn.sel{border-color:var(--gold);color:var(--gold);background:rgba(255,204,68,.07)}
+.hero-sel-btn .hname{font-weight:600;color:var(--bright)}
+.hero-sel-btn .hmeta{font-size:9px;color:var(--muted)}
 /* INSTALL */
 .install-banner{display:none;background:var(--panel2);border-bottom:1px solid var(--border);padding:9px 13px;align-items:center;gap:9px;flex-shrink:0}
 .install-banner.show{display:flex}
 .install-text{flex:1;font-size:12px;color:var(--text)}.install-text strong{color:var(--gold)}
 .btn-install{background:var(--gold);color:#07090e;border:none;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:9px;font-weight:700;letter-spacing:1px;padding:7px 11px;cursor:pointer;white-space:nowrap}
 .btn-dismiss{background:transparent;border:none;color:var(--muted);font-size:17px;cursor:pointer;padding:0 3px;line-height:1}
-
 @keyframes pulse-gold{0%,100%{box-shadow:0 0 0 0 rgba(255,204,68,0)}50%{box-shadow:0 0 12px 2px rgba(255,204,68,.18)}}
 .v-great{animation:pulse-gold 2s infinite}
 </style>
 </head>
 <body>
-
 <div class="install-banner" id="install-banner">
   <div class="install-text"><strong>Instalá la app</strong> — funciona sin internet</div>
   <button class="btn-install" id="btn-install">INSTALAR</button>
   <button class="btn-dismiss" onclick="document.getElementById('install-banner').classList.remove('show')">✕</button>
 </div>
-
 <div class="app-header">
   <div class="logo">E7 <span>GEAR</span></div>
 </div>
-
-<!-- MODE SELECTOR - scrollable -->
-<div class="mode-scroll" id="mode-scroll">
+<div class="mode-scroll">
   <button class="mode-btn active" onclick="setMode(0,this)">+0</button>
   <button class="mode-btn" onclick="setMode(3,this)">+3</button>
   <button class="mode-btn" onclick="setMode(6,this)">+6</button>
@@ -205,89 +227,70 @@ input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appear
   <button class="mode-btn" onclick="setMode(12,this)">+12</button>
   <button class="mode-btn" onclick="setMode(15,this)">+15</button>
 </div>
-
 <div class="nav-tabs">
   <button class="nav-tab active" onclick="showTab('eval',this)">⚙ EVALUAR</button>
-  <button class="nav-tab"        onclick="showTab('builds',this)">📦 BUILDS</button>
-  <button class="nav-tab"        onclick="showTab('ref',this)">📋 TABLA</button>
+  <button class="nav-tab" onclick="showTab('builds',this)">📦 BUILDS</button>
+  <button class="nav-tab" onclick="showTab('heroes',this)">🦸 HÉROES</button>
+  <button class="nav-tab" onclick="showTab('ref',this)">📋 TABLA</button>
 </div>
 
 <div class="scroll-area">
 
-<!-- TAB EVALUAR -->
+<!-- ══ TAB EVALUAR ══ -->
 <div class="tab-page active" id="tab-eval">
-
-  <!-- SLOT SELECTOR -->
   <div class="slbl">SLOT DEL GEAR</div>
   <div class="slot-selector">
-    <button class="slot-pick" data-slot="1" onclick="selSlotEval(this)"><span class="slot-num">⚔️</span>1 · ARMA</button>
-    <button class="slot-pick" data-slot="2" onclick="selSlotEval(this)"><span class="slot-num">🪖</span>2 · CASCO</button>
-    <button class="slot-pick" data-slot="3" onclick="selSlotEval(this)"><span class="slot-num">🛡️</span>3 · ARMADURA</button>
-    <button class="slot-pick" data-slot="4" onclick="selSlotEval(this)"><span class="slot-num">📿</span>4 · COLGANTE</button>
-    <button class="slot-pick" data-slot="5" onclick="selSlotEval(this)"><span class="slot-num">💍</span>5 · ANILLO</button>
-    <button class="slot-pick" data-slot="6" onclick="selSlotEval(this)"><span class="slot-num">👟</span>6 · BOTAS</button>
+    <button class="slot-pick" data-slot="1" onclick="pickSlot(this)"><span class="sn">⚔️</span>1·ARMA</button>
+    <button class="slot-pick" data-slot="2" onclick="pickSlot(this)"><span class="sn">🪖</span>2·CASCO</button>
+    <button class="slot-pick" data-slot="3" onclick="pickSlot(this)"><span class="sn">🛡️</span>3·ARMADURA</button>
+    <button class="slot-pick" data-slot="4" onclick="pickSlot(this)"><span class="sn">📿</span>4·COLGANTE</button>
+    <button class="slot-pick" data-slot="5" onclick="pickSlot(this)"><span class="sn">💍</span>5·ANILLO</button>
+    <button class="slot-pick" data-slot="6" onclick="pickSlot(this)"><span class="sn">👟</span>6·BOTAS</button>
   </div>
-
-  <!-- MAIN STAT -->
-  <div class="main-stat-row hidden" id="main-stat-row">
+  <div class="gear-info-row" id="gear-info-row">
     <div>
-      <div class="ms-label">STAT PRINCIPAL</div>
-      <select id="main-stat-sel" onchange="recalcMainStat()">
-        <option value="">— elegir —</option>
-      </select>
+      <div class="gi-label">STAT PRINCIPAL</div>
+      <select id="main-stat-sel"><option value="">— elegir —</option></select>
     </div>
     <div>
-      <div class="ms-label">NIVEL DEL GEAR</div>
-      <select id="gear-level-sel" onchange="recalcMainStat()">
+      <div class="gi-label">NIVEL DEL GEAR</div>
+      <select id="gear-level-sel" onchange="updateLvBadge()">
         <option value="">— elegir —</option>
         <option value="72">Lv 72</option>
         <option value="78">Lv 78 (historia)</option>
         <option value="85">Lv 85</option>
-        <option value="88">Lv 88 (historia/tienda)</option>
+        <option value="88">Lv 88</option>
         <option value="90">Lv 90 (ascendido)</option>
       </select>
+      <div id="lv-badge" style="margin-top:6px"></div>
     </div>
   </div>
-  <div class="main-stat-row hidden" id="main-stat-level-row" style="grid-template-columns:1fr;padding:8px 12px">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <span style="font-size:12px;color:var(--text)" id="main-stat-desc">—</span>
-      <span class="ms-level ms-lv-unknown" id="main-stat-level">—</span>
-    </div>
-  </div>
-
-  <!-- SUBSTATS -->
-  <div class="slbl" style="margin-top:10px">SUBSTATS</div>
+  <div class="slbl">SUBSTATS</div>
   <div class="evaluator">
     <div id="subs-container"></div>
     <div class="overall">
       <div class="overall-top">
-        <div>
-          <div class="ov-lbl">VEREDICTO</div>
-          <div class="overall-verdict v-none" id="overall-verdict">—</div>
-        </div>
+        <div><div class="ov-lbl">VEREDICTO</div><div class="overall-verdict v-none" id="overall-verdict">—</div></div>
         <div class="score-bar"><div class="score-fill" id="score-fill"></div></div>
       </div>
     </div>
-
-    <!-- ROLE -->
     <div class="info-box role-box" id="role-box">
       <div class="info-title">🎯 CONSEJO DE ROL</div>
       <div id="role-content"></div>
     </div>
-
-    <!-- RESET TO 0 -->
+    <div class="info-box upgrade-box" id="upgrade-box">
+      <div class="info-title">🔄 COMPARACIÓN CON HEROES EQUIPADOS</div>
+      <div id="upgrade-content"></div>
+    </div>
     <div class="info-box reset-box" id="reset-box">
       <div class="info-title">🔄 ¿BAJAR A +0?</div>
       <div id="reset-content"></div>
     </div>
-
-    <!-- MODGEM -->
     <div class="info-box modgem-box" id="modgem-box">
       <div class="info-title">💎 ASESOR MODGEM</div>
       <div id="modgem-content"></div>
-      <div class="mg-warn">⚠ Solo vale en stats con 0–1 rolls (valor mínimo). Más rolls = retorno decreciente.</div>
+      <div class="mg-warn">⚠ Solo vale en stats con 0–1 rolls. Más rolls = retorno decreciente.</div>
     </div>
-
     <div class="legend">
       <div class="leg"><div class="leg-dot" style="background:var(--red)"></div><span style="color:var(--red)">ROMPER</span></div>
       <div class="leg"><div class="leg-dot" style="background:var(--orange)"></div><span style="color:var(--orange)">DUDOSO</span></div>
@@ -295,19 +298,37 @@ input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appear
       <div class="leg"><div class="leg-dot" style="background:var(--green)"></div><span style="color:var(--green)">GUARDAR</span></div>
       <div class="leg"><div class="leg-dot" style="background:var(--gold)"></div><span style="color:var(--gold)">EXCELENTE</span></div>
     </div>
-
     <button class="btn btn-save" onclick="openSaveModal()">💾 GUARDAR BUILD</button>
     <button class="btn btn-ghost" onclick="resetAll()">⟳ LIMPIAR TODO</button>
   </div>
 </div>
 
-<!-- TAB BUILDS -->
+<!-- ══ TAB BUILDS ══ -->
 <div class="tab-page" id="tab-builds">
   <div class="slbl">BUILDS GUARDADAS</div>
   <div id="builds-list"></div>
 </div>
 
-<!-- TAB REF -->
+<!-- ══ TAB HEROES ══ -->
+<div class="tab-page" id="tab-heroes">
+  <div class="hero-filters">
+    <input type="search" class="search-input" id="hero-search" placeholder="🔍 Buscar héroe..." oninput="filterHeroes()">
+    <div class="filter-row">
+      <button class="filter-btn top-active" id="f-top" onclick="toggleFilter('top')">⭐ TOP META</button>
+      <button class="filter-btn" id="f-all" onclick="toggleFilter('all')">TODOS</button>
+      <button class="filter-btn" id="f-ml" onclick="toggleFilter('ml')">ML</button>
+    </div>
+    <div class="filter-row">
+      <button class="filter-btn" id="f-dps" onclick="toggleFilter('dps')">⚔ DPS</button>
+      <button class="filter-btn" id="f-tank" onclick="toggleFilter('tank')">🛡 TANK</button>
+      <button class="filter-btn" id="f-support" onclick="toggleFilter('support')">💚 SOPORTE</button>
+      <button class="filter-btn" id="f-debuffer" onclick="toggleFilter('debuffer')">☠ DEBUFFER</button>
+    </div>
+  </div>
+  <div class="hero-grid" id="hero-grid"></div>
+</div>
+
+<!-- ══ TAB REF ══ -->
 <div class="tab-page" id="tab-ref">
   <div id="ref-container"></div>
 </div>
@@ -319,7 +340,10 @@ input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appear
   <div class="modal">
     <div class="modal-title">💾 GUARDAR BUILD</div>
     <label>NOMBRE (opcional)</label>
-    <input type="text" id="modal-name" placeholder="Ej: Botas SPD tanque..." maxlength="40">
+    <input type="text" id="modal-name" placeholder="Ej: Botas SPD tanque..." maxlength="40" style="font-size:14px">
+    <label>ASIGNAR A HÉROE (opcional)</label>
+    <input type="search" id="modal-hero-search" placeholder="🔍 Buscar héroe..." oninput="filterModalHeroes()" style="font-size:13px;margin-bottom:8px">
+    <div class="hero-select-grid" id="modal-hero-grid"></div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeModal()">CANCELAR</button>
       <button class="btn-confirm" onclick="confirmSave()">GUARDAR</button>
@@ -327,538 +351,527 @@ input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appear
   </div>
 </div>
 
+<!-- MODAL ASSIGN (from builds tab) -->
+<div class="modal-overlay" id="assign-modal">
+  <div class="modal">
+    <div class="modal-title">🦸 ASIGNAR A HÉROE</div>
+    <input type="search" id="assign-hero-search" placeholder="🔍 Buscar héroe..." oninput="filterAssignHeroes()" style="font-size:13px;margin-bottom:8px;width:100%">
+    <div class="hero-select-grid" id="assign-hero-grid"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeAssignModal()">CANCELAR</button>
+      <button class="btn-confirm" onclick="confirmAssign()">ASIGNAR</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════════════════════════════
-// MAIN STAT RANGES BY SLOT — used to detect gear level
-// Format: [lvl1_min, lvl1_max, lvl85_min, lvl85_max]
+// SUBSTAT DATA
 // ══════════════════════════════════════════════════════════
-const SLOT_CONFIG = {
-  1: { // Arma
-    fixed: true,
-    mainStats: [{id:'atk', lbl:'ATK', ranges:[{lv:'~Lv1-30',min:100,max:300},{lv:'~Lv58',min:301,max:700},{lv:'~Lv72',min:701,max:1000},{lv:'Lv85',min:1001,max:2000}]}],
-  },
-  2: { // Casco
-    fixed: true,
-    mainStats: [{id:'hp', lbl:'HP', ranges:[{lv:'~Lv1-30',min:200,max:800},{lv:'~Lv58',min:801,max:2000},{lv:'~Lv72',min:2001,max:3500},{lv:'Lv85',min:3501,max:9000}]}],
-  },
-  3: { // Armadura
-    fixed: true,
-    mainStats: [{id:'def', lbl:'DEF', ranges:[{lv:'~Lv1-30',min:30,max:100},{lv:'~Lv58',min:101,max:220},{lv:'~Lv72',min:221,max:350},{lv:'Lv85',min:351,max:700}]}],
-  },
-  4: { // Colgante
-    fixed: false,
-    mainStats: [
-      {id:'atk',   lbl:'ATK',    ranges:[{lv:'~Lv58',min:100,max:300},{lv:'~Lv72',min:301,max:500},{lv:'Lv85',min:501,max:1200}]},
-      {id:'hp',    lbl:'HP',     ranges:[{lv:'~Lv58',min:200,max:800},{lv:'~Lv72',min:801,max:2000},{lv:'Lv85',min:2001,max:5000}]},
-      {id:'def',   lbl:'DEF',   ranges:[{lv:'~Lv58',min:30,max:100},{lv:'~Lv72',min:101,max:200},{lv:'Lv85',min:201,max:500}]},
-      {id:'atkp',  lbl:'ATK %',  ranges:[{lv:'~Lv58',min:5,max:15},{lv:'~Lv72',min:16,max:25},{lv:'Lv85',min:26,max:65}]},
-      {id:'hpp',   lbl:'HP %',   ranges:[{lv:'~Lv58',min:5,max:15},{lv:'~Lv72',min:16,max:25},{lv:'Lv85',min:26,max:65}]},
-      {id:'defp',  lbl:'DEF %',  ranges:[{lv:'~Lv58',min:5,max:15},{lv:'~Lv72',min:16,max:25},{lv:'Lv85',min:26,max:65}]},
-      {id:'crate', lbl:'C.Rate %',ranges:[{lv:'~Lv58',min:5,max:10},{lv:'~Lv72',min:11,max:18},{lv:'Lv85',min:19,max:58}]},
-      {id:'cdmg',  lbl:'C.Dmg %', ranges:[{lv:'~Lv58',min:5,max:15},{lv:'~Lv72',min:16,max:30},{lv:'Lv85',min:31,max:80}]},
-    ]
-  },
-  5: { // Anillo
-    fixed: false,
-    mainStats: [
-      {id:'atk',  lbl:'ATK',    ranges:[{lv:'~Lv58',min:100,max:300},{lv:'~Lv72',min:301,max:500},{lv:'Lv85',min:501,max:1200}]},
-      {id:'hp',   lbl:'HP',     ranges:[{lv:'~Lv58',min:200,max:800},{lv:'~Lv72',min:801,max:2000},{lv:'Lv85',min:2001,max:5000}]},
-      {id:'def',  lbl:'DEF',    ranges:[{lv:'~Lv58',min:30,max:100},{lv:'~Lv72',min:101,max:200},{lv:'Lv85',min:201,max:500}]},
-      {id:'atkp', lbl:'ATK %',  ranges:[{lv:'~Lv58',min:5,max:15},{lv:'~Lv72',min:16,max:25},{lv:'Lv85',min:26,max:65}]},
-      {id:'hpp',  lbl:'HP %',   ranges:[{lv:'~Lv58',min:5,max:15},{lv:'~Lv72',min:16,max:25},{lv:'Lv85',min:26,max:65}]},
-      {id:'defp', lbl:'DEF %',  ranges:[{lv:'~Lv58',min:5,max:15},{lv:'~Lv72',min:16,max:25},{lv:'Lv85',min:26,max:65}]},
-      {id:'eff',  lbl:'EFF %',  ranges:[{lv:'~Lv58',min:5,max:15},{lv:'~Lv72',min:16,max:25},{lv:'Lv85',min:26,max:65}]},
-      {id:'res',  lbl:'RES %',  ranges:[{lv:'~Lv58',min:5,max:15},{lv:'~Lv72',min:16,max:25},{lv:'Lv85',min:26,max:65}]},
-    ]
-  },
-  6: { // Botas
-    fixed: false,
-    mainStats: [
-      {id:'atk',  lbl:'ATK',    ranges:[{lv:'~Lv58',min:100,max:300},{lv:'~Lv72',min:301,max:500},{lv:'Lv85',min:501,max:1200}]},
-      {id:'hp',   lbl:'HP',     ranges:[{lv:'~Lv58',min:200,max:800},{lv:'~Lv72',min:801,max:2000},{lv:'Lv85',min:2001,max:5000}]},
-      {id:'def',  lbl:'DEF',    ranges:[{lv:'~Lv58',min:30,max:100},{lv:'~Lv72',min:101,max:200},{lv:'Lv85',min:201,max:500}]},
-      {id:'atkp', lbl:'ATK %',  ranges:[{lv:'~Lv58',min:5,max:15},{lv:'~Lv72',min:16,max:25},{lv:'Lv85',min:26,max:65}]},
-      {id:'hpp',  lbl:'HP %',   ranges:[{lv:'~Lv58',min:5,max:15},{lv:'~Lv72',min:16,max:25},{lv:'Lv85',min:26,max:65}]},
-      {id:'defp', lbl:'DEF %',  ranges:[{lv:'~Lv58',min:5,max:15},{lv:'~Lv72',min:16,max:25},{lv:'Lv85',min:26,max:65}]},
-      {id:'spd',  lbl:'SPD',    ranges:[{lv:'~Lv58',min:4,max:8},{lv:'~Lv72',min:9,max:14},{lv:'Lv85',min:15,max:45}]},
-    ]
-  }
+var ROLL_COUNT = {0:1,3:2,6:2,9:3,12:4,15:5};
+var PER_ROLL = {
+  spd:  {min:2,  low:3,  good:3.5, max:4,   unit:'',  flat:false},
+  crate:{min:3,  low:4,  good:4,   max:5,   unit:'%', flat:false},
+  cdmg: {min:4,  low:5,  good:6,   max:7,   unit:'%', flat:false},
+  atkp: {min:4,  low:5,  good:6,   max:8,   unit:'%', flat:false},
+  hpp:  {min:4,  low:5,  good:6,   max:8,   unit:'%', flat:false},
+  defp: {min:4,  low:5,  good:6,   max:8,   unit:'%', flat:false},
+  eff:  {min:4,  low:5,  good:6,   max:8,   unit:'%', flat:false},
+  res:  {min:4,  low:5,  good:6,   max:8,   unit:'%', flat:false},
+  atkf: {min:33, low:38, good:42,  max:46,  unit:'',  flat:true},
+  deff: {min:28, low:30, good:32,  max:34,  unit:'',  flat:true},
+  hpf:  {min:158,low:175,good:188, max:201, unit:'',  flat:true}
 };
-
-// ══════════════════════════════════════════════════════════
-// SUBSTAT DATA — rolls acumulados por nivel de mejora
-// ══════════════════════════════════════════════════════════
-function buildSD(perRollMin, perRollOk, perRollGood, perRollMax, unit, flat) {
-  const rolls = {0:1, 3:2, 6:2, 9:3, 12:4, 15:5};
-  const result = {};
-  for (const [plus, r] of Object.entries(rolls)) {
-    result[plus] = {
-      min:  +(perRollMin  * r).toFixed(1),
-      low:  +(perRollOk   * r).toFixed(1),
-      ok:   +(perRollOk   * r).toFixed(1),
-      good: +(perRollGood * r).toFixed(1),
-      max:  +(perRollMax  * r).toFixed(1),
-      unit, flat
-    };
-  }
-  return result;
-}
-
-// Per-roll ranges for lvl 85 epic gear
-const RAW = {
-  spd:   buildSD(2,3,3.5,4,  '',  false),
-  crate: buildSD(3,4,4,5,    '%', false),
-  cdmg:  buildSD(4,5,6,7,    '%', false),
-  atkp:  buildSD(4,5,6,8,    '%', false),
-  hpp:   buildSD(4,5,6,8,    '%', false),
-  defp:  buildSD(4,5,6,8,    '%', false),
-  eff:   buildSD(4,5,6,8,    '%', false),
-  res:   buildSD(4,5,6,8,    '%', false),
-  atkf:  buildSD(33,38,42,46,'',  true),
-  deff:  buildSD(28,30,32,34,'',  true),
-  hpf:   buildSD(158,175,188,201,'',true),
-};
-
-function getStatData(id, plus) {
-  return RAW[id] ? RAW[id][plus] : null;
-}
-
-const STAT_OPTS = [
-  {id:'none', lbl:'— vacío —'},
-  {id:'spd',  lbl:'SPD'},
-  {id:'crate',lbl:'C.Rate %'},
-  {id:'cdmg', lbl:'C.Dmg %'},
-  {id:'atkp', lbl:'ATK %'},
-  {id:'hpp',  lbl:'HP %'},
-  {id:'defp', lbl:'DEF %'},
-  {id:'eff',  lbl:'EFF %'},
-  {id:'res',  lbl:'RES %'},
-  {id:'atkf', lbl:'ATK plano'},
-  {id:'deff', lbl:'DEF plano'},
-  {id:'hpf',  lbl:'HP plano'},
+var STAT_OPTS=[
+  {id:'none',lbl:'— vacío —'},{id:'spd',lbl:'SPD'},{id:'crate',lbl:'C.Rate %'},
+  {id:'cdmg',lbl:'C.Dmg %'},{id:'atkp',lbl:'ATK %'},{id:'hpp',lbl:'HP %'},
+  {id:'defp',lbl:'DEF %'},{id:'eff',lbl:'EFF %'},{id:'res',lbl:'RES %'},
+  {id:'atkf',lbl:'ATK plano'},{id:'deff',lbl:'DEF plano'},{id:'hpf',lbl:'HP plano'}
 ];
-
-const MGS={
+var SLOTS={
+  1:{fixed:true,ms:[{id:'atk',lbl:'ATK'}]},
+  2:{fixed:true,ms:[{id:'hp',lbl:'HP'}]},
+  3:{fixed:true,ms:[{id:'def',lbl:'DEF'}]},
+  4:{fixed:false,ms:[{id:'atk',lbl:'ATK'},{id:'hp',lbl:'HP'},{id:'def',lbl:'DEF'},{id:'atkp',lbl:'ATK %'},{id:'hpp',lbl:'HP %'},{id:'defp',lbl:'DEF %'},{id:'crate',lbl:'C.Rate %'},{id:'cdmg',lbl:'C.Dmg %'}]},
+  5:{fixed:false,ms:[{id:'atk',lbl:'ATK'},{id:'hp',lbl:'HP'},{id:'def',lbl:'DEF'},{id:'atkp',lbl:'ATK %'},{id:'hpp',lbl:'HP %'},{id:'defp',lbl:'DEF %'},{id:'eff',lbl:'EFF %'},{id:'res',lbl:'RES %'}]},
+  6:{fixed:false,ms:[{id:'atk',lbl:'ATK'},{id:'hp',lbl:'HP'},{id:'def',lbl:'DEF'},{id:'atkp',lbl:'ATK %'},{id:'hpp',lbl:'HP %'},{id:'defp',lbl:'DEF %'},{id:'spd',lbl:'SPD'}]}
+};
+var MGS={
   spd:['ATK %','HP %','DEF %','C.Rate %','C.Dmg %'],
   crate:['C.Dmg %','ATK %','SPD'],cdmg:['C.Rate %','ATK %','SPD'],
   atkp:['C.Rate %','C.Dmg %','SPD','HP %'],hpp:['DEF %','SPD','RES %'],
   defp:['HP %','SPD','RES %'],eff:['SPD','HP %'],res:['HP %','DEF %','SPD'],
-  atkf:['ATK %','C.Rate %','C.Dmg %'],deff:['DEF %','HP %'],hpf:['HP %','DEF %'],
+  atkf:['ATK %','C.Rate %','C.Dmg %'],deff:['DEF %','HP %'],hpf:['HP %','DEF %']
 };
-
-const ROLES=[
-  {tag:'DPS CRÍTICO',cls:'role-dps',check:s=>has(s,'crate')&&has(s,'cdmg'),
-   desc:'Para <strong>atacantes crit</strong>: Aramintha, Vildred, Karin, Vivian, Ran.'},
-  {tag:'DPS ATK',cls:'role-dps',check:s=>has(s,'atkp')&&(has(s,'crate')||has(s,'cdmg')),
-   desc:'Para <strong>nukers ATK%</strong>: Luna, Arby, Watcher Schuri.'},
-  {tag:'DPS HP',cls:'role-dps',check:s=>has(s,'hpp')&&(has(s,'crate')||has(s,'cdmg')),
-   desc:'Para héroes que <strong>pegan por HP propio</strong>: Fallen Cecilia, Elphelt, Muwi.'},
-  {tag:'TANQUE',cls:'role-tank',check:s=>has(s,'hpp')&&has(s,'defp'),
-   desc:'<strong>Tanque puro</strong>: Crimson Armin, Roana, Ruele.'},
-  {tag:'BRUISER',cls:'role-tank',check:s=>(has(s,'hpp')||has(s,'defp'))&&has(s,'spd'),
-   desc:'<strong>Tanque rápido PvP</strong>: Alencia, Specter Tenebria.'},
-  {tag:'SOPORTE',cls:'role-support',check:s=>has(s,'spd')&&(has(s,'hpp')||has(s,'res')),
-   desc:'<strong>Healer / buffer</strong>: Angelic Montmorancy, Elena, Diene, Tamarinne.'},
-  {tag:'DEBUFFER',cls:'role-debuff',check:s=>has(s,'eff')&&has(s,'spd'),
-   desc:'<strong>Controller / debuffer</strong>: Luluca, Seaside Bellona, Basar, Dizzy.'},
+var ROLES=[
+  {tag:'DPS CRÍTICO',cls:'role-dps',check:function(s){return has(s,'crate')&&has(s,'cdmg')},desc:'<strong>Atacantes crit</strong>: Aramintha, Vildred, Karin, Vivian, Ran.'},
+  {tag:'DPS ATK',cls:'role-dps',check:function(s){return has(s,'atkp')&&(has(s,'crate')||has(s,'cdmg'))},desc:'<strong>Nukers ATK%</strong>: Luna, Arby, Watcher Schuri.'},
+  {tag:'DPS HP',cls:'role-dps',check:function(s){return has(s,'hpp')&&(has(s,'crate')||has(s,'cdmg'))},desc:'<strong>Pegan por HP propio</strong>: Fallen Cecilia, Elphelt, Muwi.'},
+  {tag:'TANQUE',cls:'role-tank',check:function(s){return has(s,'hpp')&&has(s,'defp')},desc:'<strong>Tanque puro</strong>: Crimson Armin, Roana, Ruele.'},
+  {tag:'BRUISER',cls:'role-tank',check:function(s){return (has(s,'hpp')||has(s,'defp'))&&has(s,'spd')},desc:'<strong>Tanque rápido PvP</strong>: Alencia, Specter Tenebria.'},
+  {tag:'SOPORTE',cls:'role-support',check:function(s){return has(s,'spd')&&(has(s,'hpp')||has(s,'res'))},desc:'<strong>Healer / buffer</strong>: Montmorancy, Elena, Diene, Tamarinne.'},
+  {tag:'DEBUFFER',cls:'role-debuff',check:function(s){return has(s,'eff')&&has(s,'spd')},desc:'<strong>Controller</strong>: Luluca, Seaside Bellona, Basar, Dizzy.'}
 ];
+var SNAMES=['','Arma','Casco','Armadura','Colgante','Anillo','Botas'];
+var EL_MAP={fire:'el-fire',ice:'el-ice',earth:'el-earth',light:'el-light',dark:'el-dark'};
+var EL_EMOJI={fire:'🔥',ice:'❄️',earth:'🌿',light:'☀️',dark:'🌑'};
 
-function has(subs,id){return subs.some(s=>s.id===id&&s.score>=18)}
+function has(subs,id){for(var i=0;i<subs.length;i++){if(subs[i].id===id&&subs[i].score>=18)return true;}return false;}
 
-// ── STATE ──────────────────────────────────────────────────
-let mode=0, currentSlot=null;
-let builds=JSON.parse(localStorage.getItem('e7builds')||'[]');
-const SNAMES=['','Arma','Casco','Armadura','Colgante','Anillo','Botas'];
+// ══ STATE ══
+var mode=0, currentSlot=null, selectedHeroId=null, assignBuildId=null;
+var builds=[];try{builds=JSON.parse(localStorage.getItem('e7builds')||'[]');}catch(e){builds=[];}
+var heroFilters={top:true,all:false,ml:false,dps:false,tank:false,support:false,debuffer:false};
 
-// ── TABS ──────────────────────────────────────────────────
+// ══ TABS ══
 function showTab(name,el){
-  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-page').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.remove('active')});
   document.getElementById('tab-'+name).classList.add('active');
   if(el)el.classList.add('active');
   if(name==='builds')renderBuilds();
+  if(name==='heroes')renderHeroes();
   if(name==='ref')renderRef();
 }
 
-// ── MODE ──────────────────────────────────────────────────
-function setMode(m, el){
+// ══ MODE ══
+function setMode(m,el){
   mode=m;
-  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.remove('active')});
   if(el)el.classList.add('active');
-  buildRows();
-  recalc();
+  buildRows();recalc();
 }
 
-// ── SLOT SELECTION ────────────────────────────────────────
-function selSlotEval(el){
-  document.querySelectorAll('.slot-pick').forEach(b=>b.classList.remove('active'));
+// ══ SLOT ══
+function pickSlot(el){
+  document.querySelectorAll('.slot-pick').forEach(function(b){b.classList.remove('active')});
   el.classList.add('active');
-  currentSlot=parseInt(el.dataset.slot);
-  updateMainStatUI();
-  recalcMainStat();
-}
-
-function updateMainStatUI(){
-  const cfg=SLOT_CONFIG[currentSlot];
-  if(!cfg){
-    document.getElementById('main-stat-row').classList.add('hidden');
-    document.getElementById('main-stat-level-row').classList.add('hidden');
-    return;
-  }
-  document.getElementById('main-stat-row').classList.remove('hidden');
-  const sel=document.getElementById('main-stat-sel');
-  if(cfg.fixed){
-    const ms=cfg.mainStats[0];
-    sel.innerHTML=`<option value="${ms.id}">${ms.lbl}</option>`;
-    sel.disabled=true;
-  } else {
-    sel.disabled=false;
-    sel.innerHTML=`<option value="">— elegir —</option>`+cfg.mainStats.map(s=>`<option value="${s.id}">${s.lbl}</option>`).join('');
-  }
+  currentSlot=parseInt(el.getAttribute('data-slot'));
+  var cfg=SLOTS[currentSlot];
+  var row=document.getElementById('gear-info-row');
+  row.classList.add('show');
+  var sel=document.getElementById('main-stat-sel');
+  if(cfg.fixed){sel.innerHTML='<option value="'+cfg.ms[0].id+'">'+cfg.ms[0].lbl+'</option>';sel.disabled=true;}
+  else{sel.disabled=false;var opts='<option value="">— elegir —</option>';for(var i=0;i<cfg.ms.length;i++)opts+='<option value="'+cfg.ms[i].id+'">'+cfg.ms[i].lbl+'</option>';sel.innerHTML=opts;}
   document.getElementById('gear-level-sel').value='';
-  document.getElementById('main-stat-level-row').classList.add('hidden');
+  document.getElementById('lv-badge').innerHTML='';
 }
 
-function recalcMainStat(){
-  const cfg=SLOT_CONFIG[currentSlot];
-  if(!cfg)return;
-  const sid=document.getElementById('main-stat-sel').value;
-  const lv=document.getElementById('gear-level-sel').value;
-  const lvRow=document.getElementById('main-stat-level-row');
-  const lvEl=document.getElementById('main-stat-level');
-  const descEl=document.getElementById('main-stat-desc');
-  if(!lv){lvRow.classList.add('hidden');return;}
-  lvRow.classList.remove('hidden');
-
-  // Level quality classification
-  const lvNum=parseInt(lv);
-  let cls,txt,desc;
-  if(lvNum>=90){cls='ms-lv-max';txt='Lv 90 ⭐';desc='Gear ascendido — el mejor nivel posible';}
-  else if(lvNum>=88){cls='ms-lv-max';txt='Lv 88';desc='Historia/tienda — excelente nivel';}
-  else if(lvNum>=85){cls='ms-lv-high';txt='Lv 85';desc='Gear de raid endgame — buen nivel';}
-  else if(lvNum>=78){cls='ms-lv-mid';txt='Lv 78';desc='Historia — útil temporalmente';}
-  else{cls='ms-lv-low';txt=`Lv ${lv}`;desc='Nivel bajo — reemplazar cuando puedas';}
-
-  // Substat quality warning for lower levels
-  const statLbl=cfg.mainStats.find(s=>s.id===sid)?.lbl||'';
-  const slotName=SNAMES[currentSlot]||'';
-  descEl.textContent=`${slotName}${statLbl?' · '+statLbl:''} · ${desc}`;
-  lvEl.className='ms-level '+cls;
-  lvEl.textContent=txt;
-  recalc();
+function updateLvBadge(){
+  var lv=document.getElementById('gear-level-sel').value;
+  var badge=document.getElementById('lv-badge');
+  if(!lv){badge.innerHTML='';return;}
+  var info={'72':{cls:'lv-72',txt:'Lv 72',desc:'Nivel bajo'},'78':{cls:'lv-78',txt:'Lv 78',desc:'Historia'},'85':{cls:'lv-85',txt:'Lv 85',desc:'Raid endgame'},'88':{cls:'lv-88',txt:'Lv 88 ⭐',desc:'Historia/tienda'},'90':{cls:'lv-90',txt:'Lv 90 ★',desc:'Ascendido'}}[lv];
+  badge.innerHTML='<span class="lv-badge '+info.cls+'">'+info.txt+'</span> <span style="font-size:11px;color:var(--muted)">'+info.desc+'</span>';
 }
 
-// ── EVALUATE SUBSTAT ──────────────────────────────────────
+// ══ EVALUATE ══
+function getRanges(sid){
+  var pr=PER_ROLL[sid];if(!pr)return null;
+  var r=ROLL_COUNT[mode]||1;
+  return{min:Math.round(pr.min*r*10)/10,low:Math.round(pr.low*r*10)/10,good:Math.round(pr.good*r*10)/10,max:Math.round(pr.max*r*10)/10,unit:pr.unit,flat:pr.flat};
+}
 function evaluate(sid,value){
   if(!sid||sid==='none'||value===''||value===null)return null;
-  const v=parseFloat(value);
-  if(isNaN(v)||v<=0)return null;
-  const s=getStatData(sid,mode);
-  if(!s)return null;
-
+  var v=parseFloat(value);if(isNaN(v)||v<=0)return null;
+  var s=getRanges(sid);if(!s)return null;
   if(s.flat){
     if(v>=s.good)return{cls:'v-keep',label:'SERVIBLE',score:40,rollsLow:false};
-    if(v>=s.low) return{cls:'v-maybe',label:'DUDOSO',score:18,rollsLow:true};
+    if(v>=s.low)return{cls:'v-maybe',label:'DUDOSO',score:18,rollsLow:true};
     return{cls:'v-break',label:'ROMPER',score:0,rollsLow:true};
   }
-  // For +0 give "subir?" labels
   if(mode===0){
     if(v>=s.good)return{cls:'v-great',label:'SUBIR +9',score:100,rollsLow:false};
-    if(v>=s.ok)  return{cls:'v-good', label:'SUBIR +9',score:75, rollsLow:false};
-    if(v>=s.low) return{cls:'v-keep', label:'+3 A VER',score:45, rollsLow:true};
-    if(v>=s.min) return{cls:'v-maybe',label:'DUDOSO',  score:18, rollsLow:true};
+    if(v>=s.low)return{cls:'v-good',label:'SUBIR +9',score:75,rollsLow:false};
+    if(v>=s.min)return{cls:'v-keep',label:'+3 A VER',score:45,rollsLow:true};
     return{cls:'v-break',label:'ROMPER',score:0,rollsLow:true};
   }
   if(v>=s.good)return{cls:'v-great',label:'EXCELENTE',score:100,rollsLow:false};
-  if(v>=s.ok)  return{cls:'v-good', label:'GUARDAR',  score:75, rollsLow:false};
-  if(v>=s.low) return{cls:'v-keep', label:'SERVIBLE', score:45, rollsLow:true};
-  if(v>=s.min) return{cls:'v-maybe',label:'DUDOSO',   score:18, rollsLow:true};
+  if(v>=s.ok||v>=s.low)return{cls:'v-good',label:'GUARDAR',score:75,rollsLow:false};
+  if(v>=s.min)return{cls:'v-keep',label:'SERVIBLE',score:45,rollsLow:true};
   return{cls:'v-break',label:'ROMPER',score:0,rollsLow:true};
 }
 
-// ── BUILD ROWS ────────────────────────────────────────────
+// ══ BUILD ROWS ══
 function buildRows(){
-  const c=document.getElementById('subs-container');
-  const ph=mode===0?'valor inicial':`valor a +${mode}`;
-  c.innerHTML='';
-  for(let i=0;i<4;i++){
-    const d=document.createElement('div');
-    d.className='sub-row';
-    d.innerHTML=`
-      <select id="stat-${i}" onchange="recalc()">
-        ${STAT_OPTS.map(s=>`<option value="${s.id}">${s.lbl}</option>`).join('')}
-      </select>
-      <input type="number" id="val-${i}" placeholder="${ph}" min="0" inputmode="decimal" oninput="recalc()"/>
-      <div class="verdict v-none" id="verdict-${i}">—</div>`;
-    c.appendChild(d);
-  }
+  var c=document.getElementById('subs-container');if(!c)return;
+  var ph=mode===0?'valor inicial':'valor a +'+mode;
+  var opts='';for(var i=0;i<STAT_OPTS.length;i++)opts+='<option value="'+STAT_OPTS[i].id+'">'+STAT_OPTS[i].lbl+'</option>';
+  var html='';
+  for(var i=0;i<4;i++)html+='<div class="sub-row"><select id="stat-'+i+'" onchange="recalc()">'+opts+'</select><input type="number" id="val-'+i+'" placeholder="'+ph+'" min="0" inputmode="decimal" oninput="recalc()"/><div class="verdict v-none" id="verdict-'+i+'">—</div></div>';
+  c.innerHTML=html;
 }
 
-// ── RECALC ────────────────────────────────────────────────
+// ══ RECALC ══
 function recalc(){
-  let total=0,count=0;
-  const results=[],selected=[];
-  for(let i=0;i<4;i++){
-    const sid=document.getElementById(`stat-${i}`)?.value;
-    const val=document.getElementById(`val-${i}`)?.value;
-    const vEl=document.getElementById(`verdict-${i}`);
-    if(!vEl)continue;
-    const r=evaluate(sid,val);
-    results.push({sid,val,r,score:r?r.score:0});
+  var total=0,count=0,results=[],selected=[];
+  for(var i=0;i<4;i++){
+    var sEl=document.getElementById('stat-'+i),vEl=document.getElementById('val-'+i),dEl=document.getElementById('verdict-'+i);
+    if(!sEl||!dEl)continue;
+    var sid=sEl.value,val=vEl?vEl.value:'';
+    var r=evaluate(sid,val);
+    results.push({sid:sid,val:val,r:r,score:r?r.score:0});
     selected.push(sid);
-    if(!r){vEl.className='verdict v-none';vEl.textContent='—';continue;}
-    vEl.className=`verdict ${r.cls}`;vEl.textContent=r.label;
+    if(!r){dEl.className='verdict v-none';dEl.textContent='—';continue;}
+    dEl.className='verdict '+r.cls;dEl.textContent=r.label;
     total+=r.score;count++;
   }
-  const ov=document.getElementById('overall-verdict');
-  const fill=document.getElementById('score-fill');
-  if(count===0){
-    ov.className='overall-verdict v-none';ov.textContent='—';fill.style.width='0%';
-    hide('role-box');hide('modgem-box');hide('reset-box');return;
-  }
-  const avg=total/count;
+  var ov=document.getElementById('overall-verdict'),fill=document.getElementById('score-fill');
+  if(!ov||!fill)return;
+  if(count===0){ov.className='overall-verdict v-none';ov.textContent='—';fill.style.width='0%';hide('role-box');hide('modgem-box');hide('reset-box');hide('upgrade-box');return;}
+  var avg=total/count;
   fill.style.width=Math.min(100,avg)+'%';
-
-  // overall label
   if(mode===0){
     if(avg>=75){setV(ov,'v-great','⭐ SUBIR A +9');fill.style.background='var(--gold)'}
     else if(avg>=50){setV(ov,'v-good','✅ SUBIR A +9');fill.style.background='var(--green)'}
     else if(avg>=30){setV(ov,'v-keep','🔵 SUBIR A +3');fill.style.background='#60d0ff'}
     else if(avg>=12){setV(ov,'v-maybe','🟡 DUDOSO');fill.style.background='var(--orange)'}
     else{setV(ov,'v-break','❌ ROMPER YA');fill.style.background='var(--red)'}
-  } else {
+  }else{
     if(avg>=85){setV(ov,'v-great','⭐ EXCELENTE');fill.style.background='var(--gold)'}
     else if(avg>=60){setV(ov,'v-good','✅ GUARDAR');fill.style.background='var(--green)'}
     else if(avg>=35){setV(ov,'v-keep','🔵 EVALUAR');fill.style.background='#60d0ff'}
     else if(avg>=15){setV(ov,'v-maybe','🟡 DUDOSO');fill.style.background='var(--orange)'}
     else{setV(ov,'v-break','❌ ROMPER');fill.style.background='var(--red)'}
   }
-
-  // ROLES
-  const active=results.filter(x=>x.r&&x.sid!=='none');
-  const matched=ROLES.filter(r=>r.check(active));
-  if(matched.length>0&&avg>=12){
-    document.getElementById('role-content').innerHTML=matched.slice(0,3).map(r=>
-      `<div class="role-item"><span class="role-tag ${r.cls}">${r.tag}</span><span class="role-text">${r.desc}</span></div>`).join('');
-    show('role-box');
-  } else hide('role-box');
-
-  // RESET TO +0 ADVISOR (only for +3 to +15)
-  if(mode>0){
-    calcResetAdvice(avg,results,active);
-  } else {
-    hide('reset-box');
-  }
-
-  // MODGEM (only +9 and up)
-  if(mode>=9){
-    calcModgem(results,selected,active);
-  } else {
-    hide('modgem-box');
-  }
+  // Roles
+  var active=[];for(var i=0;i<results.length;i++)if(results[i].r&&results[i].sid!=='none')active.push(results[i]);
+  var matched=[];for(var i=0;i<ROLES.length;i++)if(ROLES[i].check(active))matched.push(ROLES[i]);
+  if(matched.length&&avg>=12){
+    var html='';for(var i=0;i<Math.min(3,matched.length);i++)html+='<div class="role-item"><span class="role-tag '+matched[i].cls+'">'+matched[i].tag+'</span><span class="role-text">'+matched[i].desc+'</span></div>';
+    document.getElementById('role-content').innerHTML=html;show('role-box');
+  }else hide('role-box');
+  // Upgrade comparison
+  if(mode>=9&&avg>=35&&currentSlot)calcUpgrade(avg,results);else hide('upgrade-box');
+  // Reset advisor
+  if(mode>0)calcReset(avg,results);else hide('reset-box');
+  // Modgem
+  if(mode>=9)calcModgem(results,selected);else hide('modgem-box');
 }
 
-// ── RESET ADVISOR ─────────────────────────────────────────
-function calcResetAdvice(avg, results, active){
-  const goodCount=results.filter(r=>r.r&&r.r.score>=75).length;
-  const badCount=results.filter(r=>r.r&&r.r.score<=18&&r.sid!=='none').length;
-  const c=document.getElementById('reset-content');
-
-  // Only relevant if gear is subida (mode > 0) and not great
-  if(avg>=85){hide('reset-box');return;} // excelente, no tocar
-  if(mode<3){hide('reset-box');return;}
-
-  show('reset-box');
-
-  let html='';
-  let verdict='', vcls='';
-
-  if(avg<=15&&mode<=6){
-    // Terrible gear subido poco → romper directamente
-    verdict='❌ ROMPER DIRECTO'; vcls='rv-no';
-    html=`<p>Las subs son muy malas y el gear está poco subido. <strong>No vale gastar un ítem de reset.</strong> Mejor romper y recuperar materiales.</p>`;
-  } else if(avg<=15&&mode>=9){
-    // Terrible gear muy subido → tampoco vale el reset
-    verdict='❌ NO VALE EL RESET'; vcls='rv-no';
-    html=`<p>Las subs son malas incluso a +${mode}. <strong>El ítem de reset es muy limitado</strong> — no lo gastes acá. Romper y buscar mejor gear.</p>`;
-  } else if(avg>=50&&goodCount>=2&&badCount>=1&&mode>=9){
-    // Buen gear con 1-2 subs malas subido a +9/+12/+15 → puede valer
-    verdict='⚠ QUIZÁS VALE'; vcls='rv-maybe';
-    html=`<p>Tiene ${goodCount} subs buenas pero también ${badCount} mala/s. Si tenés ítems de reset de sobra y el gear es de un <strong>set valioso (Speed, Injury, Counter)</strong>, puede valer intentar de nuevo.</p>
-    <p style="margin-top:6px">Pero recordá: <strong>el ítem de reset es muy escaso.</strong> Evaluá bien si no hay otra pieza mejor para trabajar primero.</p>`;
-  } else if(avg>=35&&mode<=6){
-    // Gear medianamente bueno pero poco subido → seguir subiendo antes de decidir
-    verdict='🔵 SEGUIR SUBIENDO'; vcls='rv-maybe';
-    html=`<p>Está a +${mode}, todavía faltan rolls. <strong>Seguí subiendo hasta +9 o +12</strong> antes de pensar en el reset. Los rolls restantes pueden mejorar mucho el resultado.</p>`;
-  } else {
-    // General: gear malo o mediocre
-    verdict='❌ NO VALE EL RESET'; vcls='rv-no';
-    html=`<p>Las subs no justifican usar un ítem de reset. <strong>Son muy limitados</strong> — guardalo para gear con 2-3 subs excelentes que solo tienen 1 mala.</p>`;
-  }
-
-  c.innerHTML=`<div class="reset-content">${html}<span class="reset-verdict ${vcls}">${verdict}</span></div>`;
-}
-
-// ── MODGEM ────────────────────────────────────────────────
-function calcModgem(results,selected,active){
-  const bad=results.filter(r=>r.r&&r.r.score<=40&&r.sid!=='none');
-  const good=results.filter(r=>r.r&&r.r.score>=75&&r.sid!=='none');
-  if(bad.length>0&&good.length>=2){
-    const albl=selected.filter(id=>id!=='none').map(id=>STAT_OPTS.find(s=>s.id===id)?.lbl).filter(Boolean);
-    let html='';
-    bad.forEach(b=>{
-      const lbl=STAT_OPTS.find(s=>s.id===b.sid)?.lbl||b.sid;
-      const suggs=(MGS[b.sid]||[]).filter(l=>!albl.includes(l));
-      html+=`<div class="mg-item"><span class="mg-tag">${lbl}</span>
-      <span class="mg-text">${b.r.score<=18?'✅ Vale — pocos rolls.':'⚠ Varios rolls — retorno bajo.'}<br>
-      ${suggs.length?`Cambiar por: <strong>${suggs.slice(0,3).join(' / ')}</strong>`:'Sin reemplazo claro.'}</span></div>`;
-    });
-    document.getElementById('modgem-content').innerHTML=html;
-    show('modgem-box');
-  } else hide('modgem-box');
-}
-
-// ── HELPERS ───────────────────────────────────────────────
-function setV(el,cls,txt){el.className=`overall-verdict ${cls}`;el.textContent=txt}
-function show(id){document.getElementById(id).classList.add('visible')}
-function hide(id){document.getElementById(id).classList.remove('visible')}
-
-// ── RESET ALL ─────────────────────────────────────────────
-function resetAll(){
-  for(let i=0;i<4;i++){
-    const s=document.getElementById(`stat-${i}`);const v=document.getElementById(`val-${i}`);const d=document.getElementById(`verdict-${i}`);
-    if(s)s.value='none';if(v)v.value='';if(d){d.className='verdict v-none';d.textContent='—';}
-  }
-  setV(document.getElementById('overall-verdict'),'v-none','—');
-  document.getElementById('score-fill').style.width='0%';
-  // reset slot
-  document.querySelectorAll('.slot-pick').forEach(b=>b.classList.remove('active'));
-  currentSlot=null;
-  document.getElementById('main-stat-row').classList.add('hidden');
-  document.getElementById('main-stat-level-row').classList.add('hidden');
-  document.getElementById('gear-level-sel').value='';
-  hide('role-box');hide('modgem-box');hide('reset-box');
-}
-
-// ── SAVE ─────────────────────────────────────────────────
-function openSaveModal(){
-  const ok=[...Array(4)].some((_,i)=>{
-    const s=document.getElementById(`stat-${i}`)?.value;const v=document.getElementById(`val-${i}`)?.value;
-    return s&&s!=='none'&&v;
-  });
-  if(!ok){alert('Ingresá al menos 1 substat antes de guardar.');return;}
-  document.getElementById('modal-name').value='';
-  document.getElementById('modal-overlay').classList.add('open');
-}
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open')}
-function confirmSave(){
-  const name=document.getElementById('modal-name').value.trim()||'Gear sin nombre';
-  const subs=[];
-  for(let i=0;i<4;i++){
-    const sid=document.getElementById(`stat-${i}`)?.value;const val=document.getElementById(`val-${i}`)?.value;
-    if(sid&&sid!=='none'&&val){
-      const r=evaluate(sid,val);
-      subs.push({id:sid,lbl:STAT_OPTS.find(s=>s.id===sid)?.lbl||sid,val,score:r?.score||0,cls:r?.cls||'v-none',label:r?.label||'—'});
+// ══ UPGRADE COMPARISON ══
+function calcUpgrade(newAvg,results){
+  if(!currentSlot)return;
+  // Find builds assigned to heroes with gear in same slot
+  var sameslot=[];
+  for(var i=0;i<builds.length;i++){
+    if(builds[i].slot===currentSlot&&builds[i].heroId){
+      sameslot.push(builds[i]);
     }
   }
+  if(!sameslot.length){hide('upgrade-box');return;}
+  var html='';
+  for(var i=0;i<sameslot.length;i++){
+    var b=sameslot[i];
+    var oldAvg=0;
+    for(var j=0;j<b.subs.length;j++)oldAvg+=b.subs[j].score;
+    oldAvg=b.subs.length?oldAvg/b.subs.length:0;
+    var hero=getHeroById(b.heroId);
+    var hname=hero?hero.name:b.heroId;
+    if(newAvg>oldAvg+10){
+      html+='<div class="upgrade-item">✅ Mejor que el <strong>Slot '+currentSlot+' de '+hname+'</strong> (+'+Math.round(newAvg-oldAvg)+' pts). Considerá cambiarlo.</div>';
+    }else if(newAvg>oldAvg){
+      html+='<div class="upgrade-item">🔵 Levemente mejor que el de <strong>'+hname+'</strong>. Marginal.</div>';
+    }else{
+      html+='<div class="upgrade-item" style="color:#506080">El gear actual de <strong>'+hname+'</strong> en Slot '+currentSlot+' sigue siendo mejor.</div>';
+    }
+  }
+  if(html){document.getElementById('upgrade-content').innerHTML=html;show('upgrade-box');}
+  else hide('upgrade-box');
+}
+
+// ══ RESET ADVISOR ══
+function calcReset(avg,results){
+  var goodCount=0,badCount=0;
+  for(var i=0;i<results.length;i++){
+    if(results[i].r&&results[i].r.score>=75)goodCount++;
+    if(results[i].r&&results[i].r.score<=18&&results[i].sid!=='none')badCount++;
+  }
+  if(avg>=85){hide('reset-box');return;}
+  show('reset-box');
+  var html,verdict,vcls;
+  if(avg<=15&&mode<=6){verdict='❌ ROMPER DIRECTO';vcls='rv-no';html='<p>Subs muy malas y poco subido. <strong>No vale gastar el ítem de reset.</strong> Romper.</p>';}
+  else if(avg<=15&&mode>=9){verdict='❌ NO VALE';vcls='rv-no';html='<p>Subs malas incluso a +'+mode+'. <strong>Ítem de reset muy limitado</strong> — no lo gastes acá.</p>';}
+  else if(avg>=50&&goodCount>=2&&badCount>=1&&mode>=9){verdict='⚠ QUIZÁS VALE';vcls='rv-maybe';html='<p>'+goodCount+' subs buenas pero '+badCount+' mala/s. Si es set valioso (Speed/Injury/Counter) puede valer.</p><p><strong>El reset es escaso</strong> — evaluá bien.</p>';}
+  else if(avg>=35&&mode<=6){verdict='🔵 SEGUIR SUBIENDO';vcls='rv-maybe';html='<p>A +'+mode+' todavía faltan rolls. <strong>Seguí hasta +9 o +12</strong> antes de decidir.</p>';}
+  else{verdict='❌ NO VALE';vcls='rv-no';html='<p>No justifica un reset. <strong>Son escasos</strong> — guardalo para gear con 2-3 subs excelentes y 1 mala.</p>';}
+  document.getElementById('reset-content').innerHTML='<div class="reset-content">'+html+'<span class="reset-verdict '+vcls+'">'+verdict+'</span></div>';
+}
+
+// ══ MODGEM ══
+function calcModgem(results,selected){
+  var bad=[],good=[];
+  for(var i=0;i<results.length;i++){if(results[i].r&&results[i].r.score<=40&&results[i].sid!=='none')bad.push(results[i]);if(results[i].r&&results[i].r.score>=75&&results[i].sid!=='none')good.push(results[i]);}
+  if(bad.length&&good.length>=2){
+    var albl=[];for(var i=0;i<selected.length;i++){if(selected[i]!=='none'){for(var j=0;j<STAT_OPTS.length;j++){if(STAT_OPTS[j].id===selected[i]){albl.push(STAT_OPTS[j].lbl);break;}}}}
+    var html='';
+    for(var i=0;i<bad.length;i++){
+      var b=bad[i];var lbl='';for(var j=0;j<STAT_OPTS.length;j++){if(STAT_OPTS[j].id===b.sid){lbl=STAT_OPTS[j].lbl;break;}}
+      var suggs=MGS[b.sid]||[];var filtered=[];for(var j=0;j<suggs.length;j++){if(albl.indexOf(suggs[j])<0)filtered.push(suggs[j]);}
+      html+='<div class="mg-item"><span class="mg-tag">'+lbl+'</span><span class="mg-text">'+(b.r.score<=18?'✅ Vale — pocos rolls.':'⚠ Varios rolls — retorno bajo.')+'<br>'+(filtered.length?'Cambiar por: <strong>'+filtered.slice(0,3).join(' / ')+'</strong>':'Sin reemplazo claro.')+'</span></div>';
+    }
+    document.getElementById('modgem-content').innerHTML=html;show('modgem-box');
+  }else hide('modgem-box');
+}
+
+function setV(el,cls,txt){el.className='overall-verdict '+cls;el.textContent=txt}
+function show(id){var e=document.getElementById(id);if(e)e.classList.add('visible')}
+function hide(id){var e=document.getElementById(id);if(e)e.classList.remove('visible')}
+
+// ══ RESET ALL ══
+function resetAll(){
+  for(var i=0;i<4;i++){var s=document.getElementById('stat-'+i),v=document.getElementById('val-'+i),d=document.getElementById('verdict-'+i);if(s)s.value='none';if(v)v.value='';if(d){d.className='verdict v-none';d.textContent='—';}}
+  setV(document.getElementById('overall-verdict'),'v-none','—');
+  document.getElementById('score-fill').style.width='0%';
+  document.querySelectorAll('.slot-pick').forEach(function(b){b.classList.remove('active')});
+  currentSlot=null;
+  document.getElementById('gear-info-row').classList.remove('show');
+  document.getElementById('gear-level-sel').value='';
+  document.getElementById('lv-badge').innerHTML='';
+  hide('role-box');hide('modgem-box');hide('reset-box');hide('upgrade-box');
+}
+
+// ══ SAVE MODAL ══
+function openSaveModal(){
+  var ok=false;for(var i=0;i<4;i++){var s=document.getElementById('stat-'+i),v=document.getElementById('val-'+i);if(s&&v&&s.value!=='none'&&v.value){ok=true;break;}}
+  if(!ok){alert('Ingresá al menos 1 substat.');return;}
+  document.getElementById('modal-name').value='';
+  document.getElementById('modal-hero-search').value='';
+  selectedHeroId=null;
+  renderModalHeroes('');
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+function filterModalHeroes(){renderModalHeroes(document.getElementById('modal-hero-search').value);}
+function renderModalHeroes(q){
+  var grid=document.getElementById('modal-hero-grid');if(!grid)return;
+  var list=E7_HEROES.filter(function(h){return !q||h.name.toLowerCase().indexOf(q.toLowerCase())>=0;}).slice(0,40);
+  var html='<button class="hero-sel-btn'+(selectedHeroId===null?' sel':'')+'" onclick="selectModalHero(null,this)"><span class="hname">Ninguno</span><span class="hmeta">Sin asignar</span></button>';
+  for(var i=0;i<list.length;i++){var h=list[i];html+='<button class="hero-sel-btn'+(selectedHeroId===h.id?' sel':'')+'" onclick="selectModalHero(\''+h.id+'\',this)"><span class="hname">'+h.name+'</span><span class="hmeta">'+(h.ml?'ML ':'')+h.element+' '+h.cls+(h.top?' ⭐':'')+'</span></button>';}
+  grid.innerHTML=html;
+}
+function selectModalHero(id,el){
+  selectedHeroId=id;
+  document.querySelectorAll('#modal-hero-grid .hero-sel-btn').forEach(function(b){b.classList.remove('sel')});
+  if(el)el.classList.add('sel');
+}
+function confirmSave(){
+  var name=document.getElementById('modal-name').value.trim()||'Gear sin nombre';
+  var subs=[];
+  for(var i=0;i<4;i++){var s=document.getElementById('stat-'+i),v=document.getElementById('val-'+i);if(s&&v&&s.value!=='none'&&v.value){var r=evaluate(s.value,v.value);var lbl='';for(var j=0;j<STAT_OPTS.length;j++){if(STAT_OPTS[j].id===s.value){lbl=STAT_OPTS[j].lbl;break;}}subs.push({id:s.value,lbl:lbl,val:v.value,score:r?r.score:0,cls:r?r.cls:'v-none'});}}
   if(!subs.length){closeModal();return;}
-  const avg=subs.reduce((a,s)=>a+s.score,0)/subs.length;
-  let verdict,vcls,bcls;
-  if(avg>=85){verdict='⭐ EXCELENTE';vcls='v-great';bcls='bc-great';}
-  else if(avg>=60){verdict='✅ GUARDAR';vcls='v-good';bcls='bc-good';}
-  else if(avg>=35){verdict='🔵 EVALUAR';vcls='v-keep';bcls='bc-keep';}
-  else if(avg>=15){verdict='🟡 DUDOSO';vcls='v-maybe';bcls='bc-maybe';}
-  else{verdict='❌ ROMPER';vcls='v-break';bcls='bc-break';}
-  const roles=ROLES.filter(r=>r.check(subs)).slice(0,2).map(r=>({tag:r.tag,cls:r.cls}));
-  const msLv=document.getElementById('gear-level-sel')?.value;
-  const msSel=document.getElementById('main-stat-sel')?.value;
-  const msLvTxt=document.getElementById('main-stat-level')?.textContent;
-  builds.unshift({
-    id:Date.now(),name,slot:currentSlot,mode,subs,verdict,vcls,bcls,roles,
-    mainStat:msSel&&msLv?{lbl:SLOT_CONFIG[currentSlot]?.mainStats.find(s=>s.id===msSel)?.lbl||msSel,lv:msLvTxt||''}:null,
-    savedAt:new Date().toLocaleDateString('es-AR')
-  });
-  if(builds.length>60)builds.pop();
-  localStorage.setItem('e7builds',JSON.stringify(builds));
+  var avg=0;for(var i=0;i<subs.length;i++)avg+=subs[i].score;avg=avg/subs.length;
+  var verdict,vcls,bcls;
+  if(avg>=85){verdict='⭐ EXCELENTE';vcls='v-great';bcls='bc-great';}else if(avg>=60){verdict='✅ GUARDAR';vcls='v-good';bcls='bc-good';}else if(avg>=35){verdict='🔵 EVALUAR';vcls='v-keep';bcls='bc-keep';}else if(avg>=15){verdict='🟡 DUDOSO';vcls='v-maybe';bcls='bc-maybe';}else{verdict='❌ ROMPER';vcls='v-break';bcls='bc-break';}
+  var roles=[];var active=[];for(var i=0;i<subs.length;i++)active.push({id:subs[i].id,score:subs[i].score});
+  for(var i=0;i<ROLES.length;i++)if(ROLES[i].check(active))roles.push({tag:ROLES[i].tag,cls:ROLES[i].cls});
+  var lv=document.getElementById('gear-level-sel').value;
+  var msId=document.getElementById('main-stat-sel').value;
+  var msLbl='';if(currentSlot&&SLOTS[currentSlot]){for(var i=0;i<SLOTS[currentSlot].ms.length;i++){if(SLOTS[currentSlot].ms[i].id===msId){msLbl=SLOTS[currentSlot].ms[i].lbl;break;}}}
+  var hero=selectedHeroId?getHeroById(selectedHeroId):null;
+  builds.unshift({id:Date.now(),name:name,slot:currentSlot,mode:mode,subs:subs,verdict:verdict,vcls:vcls,bcls:bcls,roles:roles,gearLv:lv,mainStat:msLbl,heroId:selectedHeroId||null,heroName:hero?hero.name:null,savedAt:new Date().toLocaleDateString('es-AR')});
+  if(builds.length>80)builds.pop();
+  try{localStorage.setItem('e7builds',JSON.stringify(builds));}catch(e){}
   closeModal();
   showTab('builds',document.querySelectorAll('.nav-tab')[1]);
 }
 
-// ── RENDER BUILDS ─────────────────────────────────────────
-function renderBuilds(){
-  const c=document.getElementById('builds-list');
-  if(!builds.length){
-    c.innerHTML=`<div class="build-empty"><span class="icon">📦</span>No hay builds guardadas.<br>Evaluá un gear y tocá "Guardar Build".</div>`;return;
-  }
-  c.innerHTML=builds.map(b=>`
-    <div class="build-card ${b.bcls}">
-      <div class="build-header">
-        <div>
-          <div class="build-name">${b.name}</div>
-          <div class="build-meta">${b.slot?`Slot ${b.slot} · ${SNAMES[b.slot]} · `:''}+${b.mode}${b.mainStat?` · ${b.mainStat.lbl} ${b.mainStat.val} (${b.mainStat.lv})`:''} · ${b.savedAt}</div>
-        </div>
-        <div class="build-verdict ${b.vcls}">${b.verdict}</div>
-      </div>
-      <div class="build-subs">
-        ${b.subs.map(s=>`<div class="build-sub"><span class="sn">${s.lbl}</span><span class="sv">${s.val}</span></div>`).join('')}
-      </div>
-      ${b.roles?.length?`<div class="build-roles">${b.roles.map(r=>`<span class="role-tag ${r.cls}" style="font-size:8px;padding:2px 6px">${r.tag}</span>`).join('')}</div>`:''}
-      <div class="build-actions">
-        <button class="btn-sm btn-load" onclick="loadBuild(${b.id})">📥 CARGAR</button>
-        <button class="btn-sm btn-del"  onclick="deleteBuild(${b.id})">🗑 BORRAR</button>
-      </div>
-    </div>`).join('');
+// ══ ASSIGN MODAL ══
+var assignBuildId=null,assignSelHeroId=null;
+function openAssignModal(bid){
+  assignBuildId=bid;assignSelHeroId=null;
+  document.getElementById('assign-hero-search').value='';
+  renderAssignHeroes('');
+  document.getElementById('assign-modal').classList.add('open');
 }
-function deleteBuild(id){builds=builds.filter(b=>b.id!==id);localStorage.setItem('e7builds',JSON.stringify(builds));renderBuilds()}
-function loadBuild(id){
-  const b=builds.find(b=>b.id===id);if(!b)return;
-  setMode(b.mode,null);
-  // re-activate mode button
-  document.querySelectorAll('.mode-btn').forEach(btn=>{if(btn.textContent===`+${b.mode}`)btn.classList.add('active');else btn.classList.remove('active')});
-  setTimeout(()=>{
-    b.subs.forEach((s,i)=>{
-      const sel=document.getElementById(`stat-${i}`);const inp=document.getElementById(`val-${i}`);
-      if(sel)sel.value=s.id;if(inp)inp.value=s.val;
-    });
-    if(b.slot){
-      const slotBtn=document.querySelector(`.slot-pick[data-slot="${b.slot}"]`);
-      if(slotBtn)selSlotEval(slotBtn);
+function closeAssignModal(){document.getElementById('assign-modal').classList.remove('open');}
+function filterAssignHeroes(){renderAssignHeroes(document.getElementById('assign-hero-search').value);}
+function renderAssignHeroes(q){
+  var grid=document.getElementById('assign-hero-grid');if(!grid)return;
+  var list=E7_HEROES.filter(function(h){return !q||h.name.toLowerCase().indexOf(q.toLowerCase())>=0;}).slice(0,40);
+  var html='<button class="hero-sel-btn'+(assignSelHeroId===null?' sel':'')+'" onclick="selAssignHero(null,this)"><span class="hname">Quitar asignación</span><span class="hmeta">Sin héroe</span></button>';
+  for(var i=0;i<list.length;i++){var h=list[i];html+='<button class="hero-sel-btn'+(assignSelHeroId===h.id?' sel':'')+'" onclick="selAssignHero(\''+h.id+'\',this)"><span class="hname">'+h.name+'</span><span class="hmeta">'+(h.ml?'ML ':'')+h.element+' '+h.cls+(h.top?' ⭐':'')+'</span></button>';}
+  grid.innerHTML=html;
+}
+function selAssignHero(id,el){
+  assignSelHeroId=id;
+  document.querySelectorAll('#assign-hero-grid .hero-sel-btn').forEach(function(b){b.classList.remove('sel')});
+  if(el)el.classList.add('sel');
+}
+function confirmAssign(){
+  for(var i=0;i<builds.length;i++){
+    if(builds[i].id===assignBuildId){
+      builds[i].heroId=assignSelHeroId||null;
+      var h=assignSelHeroId?getHeroById(assignSelHeroId):null;
+      builds[i].heroName=h?h.name:null;
+      break;
     }
-    recalc();
-    showTab('eval',document.querySelectorAll('.nav-tab')[0]);
-  },60);
+  }
+  try{localStorage.setItem('e7builds',JSON.stringify(builds));}catch(e){}
+  closeAssignModal();renderBuilds();
 }
 
-// ── RENDER REF ────────────────────────────────────────────
-function renderRef(){
-  const c=document.getElementById('ref-container');
-  const plusList=[0,3,6,9,12,15];
-  const rollMap={0:1,3:2,6:2,9:3,12:4,15:5};
-  let html='';
-  plusList.forEach(p=>{
-    html+=`<div class="slbl" style="margin-top:${p?14:0}px">+${p} · ${rollMap[p]} ROLL${rollMap[p]>1?'S':''}</div><div class="ref-scroll">`;
-    Object.entries(RAW).forEach(([id,data])=>{
-      const s=data[p];const opt=STAT_OPTS.find(o=>o.id===id);
-      html+=`<div class="ref-card"><div class="ref-name">${opt?.lbl||id}</div>
-        <div class="ref-row"><span class="lb">Malo</span><span class="rmin">${s.min}${s.unit}</span></div>
-        <div class="ref-row"><span class="lb">Ok</span><span class="rok">${s.low}${s.unit}</span></div>
-        <div class="ref-row"><span class="lb">Bueno</span><span class="rgd">${s.good}${s.unit}</span></div>
-        <div class="ref-row"><span class="lb">Máx</span><span class="rmx">${s.max}${s.unit}</span></div>
-      </div>`;
-    });
-    html+='</div>';
+// ══ RENDER BUILDS ══
+function renderBuilds(){
+  var c=document.getElementById('builds-list');
+  if(!builds.length){c.innerHTML='<div class="build-empty"><span class="icon">📦</span>No hay builds guardadas.<br>Evaluá un gear y tocá "Guardar Build".</div>';return;}
+  var html='';
+  for(var i=0;i<builds.length;i++){
+    var b=builds[i];
+    var meta=(b.slot?'Slot '+b.slot+' · '+SNAMES[b.slot]+' · ':'')+'+'+b.mode+(b.gearLv?' · Lv'+b.gearLv:'')+(b.mainStat?' · '+b.mainStat:'')+' · '+b.savedAt;
+    var subsHtml='';for(var j=0;j<b.subs.length;j++)subsHtml+='<div class="build-sub"><span class="sn">'+b.subs[j].lbl+'</span><span class="sv">'+b.subs[j].val+'</span></div>';
+    var rolesHtml='';if(b.roles&&b.roles.length){rolesHtml='<div class="build-roles">';for(var j=0;j<b.roles.length;j++)rolesHtml+='<span class="role-tag '+b.roles[j].cls+'" style="font-size:8px;padding:2px 6px">'+b.roles[j].tag+'</span>';rolesHtml+='</div>';}
+    var heroHtml=b.heroName?'<div class="build-hero">🦸 '+b.heroName+'</div>':'';
+    html+='<div class="build-card '+b.bcls+'">'
+      +'<div class="build-header"><div><div class="build-name">'+b.name+'</div><div class="build-meta">'+meta+'</div>'+heroHtml+'</div><div class="build-verdict '+b.vcls+'">'+b.verdict+'</div></div>'
+      +'<div class="build-subs">'+subsHtml+'</div>'+rolesHtml
+      +'<div class="build-actions">'
+      +'<button class="btn-sm btn-load" onclick="loadBuild('+b.id+')">📥 CARGAR</button>'
+      +'<button class="btn-sm btn-assign" onclick="openAssignModal('+b.id+')">🦸 HÉROE</button>'
+      +'<button class="btn-sm btn-del" onclick="deleteBuild('+b.id+')">🗑</button>'
+      +'</div></div>';
+  }
+  c.innerHTML=html;
+}
+function deleteBuild(id){for(var i=0;i<builds.length;i++){if(builds[i].id===id){builds.splice(i,1);break;}}try{localStorage.setItem('e7builds',JSON.stringify(builds));}catch(e){}renderBuilds();}
+function loadBuild(id){
+  var b=null;for(var i=0;i<builds.length;i++){if(builds[i].id===id){b=builds[i];break;}}
+  if(!b)return;
+  var btns=document.querySelectorAll('.mode-btn');
+  for(var i=0;i<btns.length;i++){if(btns[i].textContent==='+'+b.mode){setMode(b.mode,btns[i]);break;}}
+  setTimeout(function(){
+    for(var i=0;i<b.subs.length;i++){var s=document.getElementById('stat-'+i),v=document.getElementById('val-'+i);if(s)s.value=b.subs[i].id;if(v)v.value=b.subs[i].val;}
+    if(b.slot){var sp=document.querySelector('.slot-pick[data-slot="'+b.slot+'"]');if(sp)pickSlot(sp);}
+    recalc();
+    showTab('eval',document.querySelectorAll('.nav-tab')[0]);
+  },80);
+}
+
+// ══ HEROES TAB ══
+function getHeroById(id){for(var i=0;i<E7_HEROES.length;i++)if(E7_HEROES[i].id===id)return E7_HEROES[i];return null;}
+function toggleFilter(f){
+  if(f==='all'){heroFilters.top=false;heroFilters.all=true;}
+  else if(f==='top'){heroFilters.top=!heroFilters.top;heroFilters.all=false;}
+  else if(f==='ml'){heroFilters.ml=!heroFilters.ml;}
+  else{heroFilters[f]=!heroFilters[f];}
+  document.getElementById('f-top').classList.toggle('top-active',heroFilters.top);
+  document.getElementById('f-all').classList.toggle('active',heroFilters.all);
+  document.getElementById('f-ml').classList.toggle('active',heroFilters.ml);
+  document.getElementById('f-dps').classList.toggle('active',heroFilters.dps);
+  document.getElementById('f-tank').classList.toggle('active',heroFilters.tank);
+  document.getElementById('f-support').classList.toggle('active',heroFilters.support);
+  document.getElementById('f-debuffer').classList.toggle('active',heroFilters.debuffer);
+  renderHeroes();
+}
+function filterHeroes(){renderHeroes();}
+function getHeroGear(heroId){
+  var gear={};
+  for(var i=0;i<builds.length;i++){
+    var b=builds[i];
+    if(b.heroId===heroId&&b.slot&&!gear[b.slot])gear[b.slot]=b;
+  }
+  return gear;
+}
+function renderHeroes(){
+  var grid=document.getElementById('hero-grid');if(!grid)return;
+  var q=(document.getElementById('hero-search')||{}).value||'';
+  var roleFilter=heroFilters.dps||heroFilters.tank||heroFilters.support||heroFilters.debuffer;
+  var filtered=E7_HEROES.filter(function(h){
+    if(q&&h.name.toLowerCase().indexOf(q.toLowerCase())<0)return false;
+    if(heroFilters.top&&!heroFilters.all&&!h.top)return false;
+    if(heroFilters.ml&&!h.ml)return false;
+    if(roleFilter){
+      if(heroFilters.dps&&h.role==='dps')return true;
+      if(heroFilters.tank&&h.role==='tank')return true;
+      if(heroFilters.support&&h.role==='support')return true;
+      if(heroFilters.debuffer&&h.role==='debuffer')return true;
+      return false;
+    }
+    return true;
   });
+  // Deduplicate by id
+  var seen={};var deduped=[];
+  for(var i=0;i<filtered.length;i++){if(!seen[filtered[i].id]){seen[filtered[i].id]=true;deduped.push(filtered[i]);}}
+  // Sort: top first, then alphabetical
+  deduped.sort(function(a,b){if(a.top&&!b.top)return -1;if(!a.top&&b.top)return 1;return a.name.localeCompare(b.name);});
+  if(!deduped.length){grid.innerHTML='<div class="build-empty"><span class="icon">🔍</span>No se encontraron héroes.</div>';return;}
+  var html='';
+  for(var i=0;i<deduped.length;i++){
+    var h=deduped[i];
+    var gear=getHeroGear(h.id);
+    var hasGear=Object.keys(gear).length>0;
+    var setsHtml='';
+    if(h.sets){for(var j=0;j<h.sets.length;j++){var s=E7_SETS&&E7_SETS[h.sets[j]];setsHtml+='<span class="set-chip">'+(s?s.icon+' ':'')+h.sets[j].toUpperCase()+'</span>';}}
+    var statsHtml='';
+    if(h.stats){
+      var sk=Object.keys(h.stats);
+      for(var j=0;j<sk.length;j++){
+        var sv=h.stats[sk[j]];var slbl='';
+        for(var k=0;k<STAT_OPTS.length;k++){if(STAT_OPTS[k].id===sk[j]){slbl=STAT_OPTS[k].lbl;break;}}
+        if(!slbl)slbl=sk[j];
+        statsHtml+='<span class="stat-chip sc-'+sv+'">'+slbl+'</span>';
+      }
+    }
+    var gearHtml='';
+    if(hasGear){
+      var sl=Object.keys(gear);
+      gearHtml='<div class="hero-gear-assigned">📦 Gear: ';
+      var parts=[];for(var j=0;j<sl.length;j++)parts.push('<span>Slot '+sl[j]+': '+gear[sl[j]].name+'</span>');
+      gearHtml+=parts.join(', ')+'</div>';
+    }
+    var stars='';for(var j=0;j<h.stars;j++)stars+='★';
+    html+='<div class="hero-card'+(h.top?' top-hero':'')+(hasGear?' has-gear':'')+'">'
+      +(h.top?'<div class="hero-top-badge">TOP META</div>':'')
+      +'<div class="hero-name">'+h.name+'</div>'
+      +'<div class="hero-meta">'
+        +'<span class="hero-el '+(EL_MAP[h.element]||'')+'">'+(EL_EMOJI[h.element]||'')+' '+h.element.toUpperCase()+'</span>'
+        +'<span class="hero-stars">'+stars+'</span>'
+        +(h.ml?'<span class="hero-ml">ML</span>':'')
+        +'<span style="font-size:10px;color:var(--muted)">'+h.cls.toUpperCase()+'</span>'
+      +'</div>'
+      +(setsHtml?'<div class="hero-sets">'+setsHtml+'</div>':'')
+      +(statsHtml?'<div class="hero-stats-row">'+statsHtml+'</div>':'')
+      +(h.noNeedCrate?'<div class="hero-note special">⚠ NO necesita C.Rate — ataques siempre críticos</div>':'')
+      +'<div class="hero-note'+(h.notes&&h.notes.indexOf('TOP')>=0?' special':'')+'">'+(h.notes||'')+'</div>'
+      +gearHtml
+      +'</div>';
+  }
+  grid.innerHTML=html;
+}
+
+// ══ REF ══
+function renderRef(){
+  var c=document.getElementById('ref-container');if(!c)return;
+  var plusList=[0,3,6,9,12,15];
+  var html='';
+  for(var p=0;p<plusList.length;p++){
+    var pl=plusList[p],r=ROLL_COUNT[pl];
+    html+='<div class="slbl" style="margin-top:'+(pl?14:0)+'px">+'+pl+' · '+r+' ROLL'+(r>1?'S':'')+'</div><div class="ref-scroll">';
+    var ids=Object.keys(PER_ROLL);
+    for(var i=0;i<ids.length;i++){
+      var id=ids[i],pr=PER_ROLL[id];
+      var mn=Math.round(pr.min*r*10)/10,lw=Math.round(pr.low*r*10)/10,gd=Math.round(pr.good*r*10)/10,mx=Math.round(pr.max*r*10)/10;
+      var lbl='';for(var j=0;j<STAT_OPTS.length;j++){if(STAT_OPTS[j].id===id){lbl=STAT_OPTS[j].lbl;break;}}
+      html+='<div class="ref-card"><div class="ref-name">'+lbl+'</div>'
+        +'<div class="ref-row"><span class="lb">Malo</span><span class="rmin">'+mn+pr.unit+'</span></div>'
+        +'<div class="ref-row"><span class="lb">Ok</span><span class="rok">'+lw+pr.unit+'</span></div>'
+        +'<div class="ref-row"><span class="lb">Bueno</span><span class="rgd">'+gd+pr.unit+'</span></div>'
+        +'<div class="ref-row"><span class="lb">Máx</span><span class="rmx">'+mx+pr.unit+'</span></div></div>';
+    }
+    html+='</div>';
+  }
   c.innerHTML=html;
 }
 
-// ── PWA ───────────────────────────────────────────────────
-let dp=null;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;document.getElementById('install-banner').classList.add('show')});
-document.getElementById('btn-install').addEventListener('click',async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;document.getElementById('install-banner').classList.remove('show')});
-document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('modal-overlay'))closeModal()});
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+// ══ PWA ══
+var dp=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;document.getElementById('install-banner').classList.add('show');});
+document.getElementById('btn-install').addEventListener('click',function(){if(!dp)return;dp.prompt();dp.userChoice.then(function(){dp=null;document.getElementById('install-banner').classList.remove('show');});});
+document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===document.getElementById('modal-overlay'))closeModal();});
+document.getElementById('assign-modal').addEventListener('click',function(e){if(e.target===document.getElementById('assign-modal'))closeAssignModal();});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
 
-// ── INIT ──────────────────────────────────────────────────
+// ══ INIT ══
 buildRows();
 </script>
 </body>
