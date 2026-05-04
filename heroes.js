@@ -880,7 +880,221 @@ var E7_HEROES = [
  stats:{spd:'fast',eff:'high',hpp:'mid'},
  notes:'Alt skin. Misma build que Seaside Bellona.'},
 
+
+// ── HÉROES ACTUALIZADOS — epic7db.com Mayo 2026 ──
+
+{id:'ainz',name:'Ainz Ooal Gown',stars:5,element:'dark',cls:'mage',ml:false,top:true,
+ role:'dps',sets:['speed','crit','destruction'],
+ stats:{spd:'fast',crate:'high',cdmg:'high',atkp:'high'},
+ notes:'Collab Overlord. Top DPS oscuro. AoE masivo e immunity.'},
+
+{id:'aither',name:'Aither',stars:3,element:'ice',cls:'soulweaver',ml:false,top:false,
+ role:'support',sets:['speed','immunity'],
+ stats:{spd:'fast',hpp:'mid',res:'mid'},
+ notes:'Healer hielo básico. Bueno early game.'},
+
+{id:'aki',name:'Aki',stars:5,element:'fire',cls:'thief',ml:false,top:true,
+ role:'dps',sets:['speed','crit','destruction'],
+ stats:{spd:'fast',crate:'high',cdmg:'high',atkp:'high'},
+ notes:'Collab. Thief fuego. Top DPS en PvP.'},
+
+{id:'albedo',name:'Albedo',stars:5,element:'earth',cls:'knight',ml:false,top:true,
+ role:'tank',sets:['speed','counter','hp'],
+ stats:{spd:'mid',hpp:'high',defp:'high'},
+ notes:'Collab Overlord. Top tank tierra. Counter y barrier masivo.'},
+
+{id:'alencia',name:'Alencia',stars:5,element:'earth',cls:'warrior',ml:false,top:true,
+ role:'tank',sets:['speed','counter','hp'],
+ stats:{spd:'mid',hpp:'high',defp:'mid',crate:'mid'},
+ notes:'Top bruiser tierra. HP scaling. Dispel AoE con S3. Muy usada en GvG.'},
+
+{id:'all-rounder-wanda',name:'All-Rounder Wanda',stars:5,element:'dark',cls:'ranger',ml:false,top:false,
+ role:'dps',sets:['speed','crit'],
+ stats:{spd:'fast',crate:'high',cdmg:'high'},
+ notes:'Ranger oscura. DPS sólida.'},
+
+{id:'amid',name:'Amid',stars:5,element:'light',cls:'soulweaver',ml:false,top:true,
+ role:'support',sets:['speed','immunity'],
+ stats:{spd:'fast',hpp:'high',res:'high'},
+ notes:'Top healer luz. Revive + immunity. Muy usada en PvP.'},
+
+{id:'amiki',name:'Amiki',stars:5,element:'ice',cls:'mage',ml:false,top:false,
+ role:'dps',sets:['speed','crit','destruction'],
+ stats:{spd:'mid',crate:'high',cdmg:'high',atkp:'high'},
+ notes:'Maga hielo reciente. DPS sólida.'},
+
+{id:'angel-of-light-angelica',name:'Angel of Light Angelica',stars:5,element:'light',cls:'soulweaver',ml:true,top:true,
+ role:'support',sets:['speed','immunity'],
+ stats:{spd:'fast',hpp:'high',res:'high'},
+ notes:'ML luz Angelica. Top healer. Revive + immunity masiva.'},
+
+{id:'angelic-montmorancy',name:'Angelic Montmorancy',stars:5,element:'ice',cls:'soulweaver',ml:false,top:true,
+ role:'support',sets:['speed','immunity'],
+ stats:{spd:'fast',hpp:'mid',res:'high'},
+ notes:'SC Montmorancy. Top healer PvE. Cleanse + poison immunity. Esencial Wyvern.'},
+
+{id:'aram',name:'Aram',stars:5,element:'earth',cls:'warrior',ml:false,top:false,
+ role:'dps',sets:['speed','crit'],
+ stats:{spd:'mid',crate:'high',cdmg:'high'},
+ notes:'Guerrero tierra 5★.'},
+
+{id:'aramintha',name:'Aramintha',stars:5,element:'fire',cls:'mage',ml:false,top:true,
+ role:'dps',sets:['speed','crit','destruction'],
+ stats:{spd:'fast',crate:'high',cdmg:'high',atkp:'high'},
+ notes:'Top maga fuego. Burn AoE. Excelente en PvE y PvP.'},
+
+{id:'archdemon-shadow',name:"Archdemon's Shadow",stars:5,element:'dark',cls:'mage',ml:true,top:true,
+ role:'dps',sets:['speed','crit','destruction'],
+ stats:{spd:'fast',crate:'high',cdmg:'high',atkp:'high'},
+ notes:'Top DPS ML oscura. AoE con penetración DEF.'},
+
+{id:'architect-laika',name:'Architect Laika',stars:5,element:'earth',cls:'mage',ml:false,top:true,
+ role:'support',sets:['speed','immunity'],
+ stats:{spd:'fast',hpp:'mid',res:'high'},
+ notes:'Maga soporte tierra. Barrier y utilidad.'},
+
+{id:'argent-waves-hwayoung',name:'Argent Waves Hwayoung',stars:5,element:'ice',cls:'warrior',ml:false,top:true,
+ role:'dps',sets:['speed','hp','destruction'],
+ stats:{spd:'fast',hpp:'high',crate:'mid',cdmg:'high'},
+ notes:'Alt Hwayoung hielo. Top DPS HP scaling.'},
+
+{id:'aria',name:'Aria',stars:5,element:'ice',cls:'mage',ml:false,top:true,
+ role:'support',sets:['speed','immunity'],
+ stats:{spd:'fast',hpp:'mid',res:'high'},
+ notes:'Maga soporte hielo (Mar 2026). Stealth a todos los aliados. Top tier.'},
+
+{id:'assassin-cartuja',name:'Assassin Cartuja',stars:5,element:'dark',cls:'thief',ml:true,top:false,
+ role:'dps',sets:['speed','crit','counter'],
+ stats:{spd:'fast',crate:'high',cdmg:'high'},
+ notes:'ML Cartuja oscuro. Counter thief.'},
+
+{id:'assassin-cidd',name:'Assassin Cidd',stars:5,element:'dark',cls:'thief',ml:true,top:false,
+ role:'dps',sets:['speed','crit'],
+ stats:{spd:'fast',crate:'high',cdmg:'high'},
+ notes:'ML Cidd oscuro. Thief DPS oscuro.'},
+
+{id:'assassin-coli',name:'Assassin Coli',stars:5,element:'dark',cls:'thief',ml:true,top:false,
+ role:'dps',sets:['speed','crit'],
+ stats:{spd:'fast',crate:'high',cdmg:'high'},
+ notes:'ML Coli oscura. Thief DPS oscura.'},
+
+{id:'auxiliary-lots',name:'Auxiliary Lots',stars:5,element:'earth',cls:'mage',ml:false,top:true,
+ role:'support',sets:['speed','immunity'],
+ stats:{spd:'fast',hpp:'mid',res:'mid'},
+ notes:'Top soporte CR pusher tierra. Esencial en speed teams.'},
+
+{id:'azalea',name:'Azalea',stars:5,element:'fire',cls:'ranger',ml:false,top:false,
+ role:'dps',sets:['speed','crit'],
+ stats:{spd:'fast',crate:'high',cdmg:'high'},
+ notes:'Ranger fuego 5★.'},
+
+{id:'bad-cat-armin',name:'Bad Cat Armin',stars:5,element:'dark',cls:'knight',ml:false,top:false,
+ role:'tank',sets:['speed','counter'],
+ stats:{spd:'mid',hpp:'high',defp:'high'},
+ notes:'Alt skin Armin oscura.'},
+
+{id:'baiken',name:'Baiken',stars:5,element:'fire',cls:'thief',ml:false,top:true,
+ role:'dps',sets:['speed','crit','counter'],
+ stats:{spd:'fast',crate:'high',cdmg:'high'},
+ notes:'Collab Guilty Gear. Top DPS thief fuego. Counter y daño masivo.'},
+
+{id:'basar',name:'Basar',stars:5,element:'dark',cls:'mage',ml:false,top:true,
+ role:'debuffer',sets:['speed','effectiveness'],
+ stats:{spd:'fast',eff:'high',hpp:'mid'},
+ notes:'Top debuffer/CR wipe oscuro. CR wipe AoE. Esencial en PvP.'},
+
+{id:'beehoo',name:'Beehoo',stars:5,element:'fire',cls:'ranger',ml:false,top:true,
+ role:'dps',sets:['speed','crit','destruction'],
+ stats:{spd:'fast',crate:'high',cdmg:'high',atkp:'high'},
+ notes:'Top DPS ranger fuego. Gran daño single target.'},
+
+{id:'belian',name:'Belian',stars:5,element:'light',cls:'knight',ml:false,top:true,
+ role:'tank',sets:['speed','counter','immunity'],
+ stats:{spd:'fast',hpp:'high',defp:'high'},
+ notes:'Top tank luz. Anti-extra turn. Counter en PvP.'},
+
+{id:'benevolent-romann',name:'Benevolent Romann',stars:5,element:'light',cls:'mage',ml:false,top:false,
+ role:'support',sets:['speed','immunity'],
+ stats:{spd:'fast',hpp:'mid',res:'mid'},
+ notes:'SC Romann luz. Soporte mago.'},
+
+{id:'benimaru',name:'Benimaru',stars:5,element:'fire',cls:'warrior',ml:false,top:true,
+ role:'dps',sets:['speed','crit','destruction'],
+ stats:{spd:'fast',crate:'high',cdmg:'high',atkp:'high'},
+ notes:'Collab. Guerrero fuego. Top DPS en PvP.'},
+
+{id:'bernard',name:'Bernard',stars:3,element:'earth',cls:'ranger',ml:false,top:false,
+ role:'support',sets:['speed'],
+ stats:{spd:'fast',hpp:'mid'},
+ notes:'CR pusher básico tierra.'},
+
+{id:'birgitta',name:'Birgitta',stars:5,element:'ice',cls:'warrior',ml:false,top:false,
+ role:'dps',sets:['speed','crit'],
+ stats:{spd:'mid',crate:'high',cdmg:'high'},
+ notes:'Guerrera hielo 5★.'},
+
+{id:'blaze-dingo',name:'Blaze Dingo',stars:5,element:'fire',cls:'warrior',ml:false,top:false,
+ role:'support',sets:['speed','immunity'],
+ stats:{spd:'fast',hpp:'mid',res:'mid'},
+ notes:'SC Dingo fuego. Soporte con cleanse.'},
+
+{id:'blood-blade-karin',name:'Blood Blade Karin',stars:5,element:'dark',cls:'thief',ml:true,top:false,
+ role:'dps',sets:['speed','crit'],
+ stats:{spd:'fast',crate:'high',cdmg:'high'},
+ notes:'ML Karin oscura. Thief DPS.'},
+
+{id:'blood-moon-haste',name:'Blood Moon Haste',stars:5,element:'ice',cls:'thief',ml:true,top:true,
+ role:'dps',sets:['speed','crit','counter'],
+ stats:{spd:'fast',crate:'high',cdmg:'high'},
+ notes:'ML Haste hielo. Top DPS counter thief.'},
+
+{id:'blooming-lidica',name:'Blooming Lidica',stars:5,element:'fire',cls:'ranger',ml:false,top:true,
+ role:'support',sets:['speed','immunity'],
+ stats:{spd:'fast',hpp:'mid',res:'mid'},
+ notes:'Top CR pusher fuego. Esencial en cleave teams.'},
+
+{id:'bomb-model-kanna',name:'Bomb Model Kanna',stars:5,element:'fire',cls:'ranger',ml:false,top:false,
+ role:'dps',sets:['speed','crit'],
+ stats:{spd:'fast',crate:'high',cdmg:'high'},
+ notes:'Ranger fuego DPS.'},
+
+{id:'boss-arunka',name:'Boss Arunka',stars:5,element:'dark',cls:'warrior',ml:false,top:false,
+ role:'dps',sets:['speed','crit'],
+ stats:{spd:'mid',crate:'high',cdmg:'high'},
+ notes:'Alt skin Arunka oscura.'},
+
+{id:'brieg',name:'Brieg',stars:5,element:'fire',cls:'knight',ml:false,top:false,
+ role:'tank',sets:['speed','counter'],
+ stats:{spd:'mid',hpp:'high',defp:'high'},
+ notes:'Knight fuego 5★.'},
+
+{id:'byblis',name:'Byblis',stars:5,element:'ice',cls:'mage',ml:false,top:false,
+ role:'debuffer',sets:['speed','effectiveness'],
+ stats:{spd:'fast',eff:'high',hpp:'mid'},
+ notes:'Maga hielo debuffer.'},
+
+{id:'camilla',name:'Camilla',stars:5,element:'fire',cls:'warrior',ml:false,top:false,
+ role:'dps',sets:['speed','crit'],
+ stats:{spd:'mid',crate:'high',cdmg:'high'},
+ notes:'Guerrera fuego 5★.'},
+
+{id:'captain-rikoris',name:'Captain Rikoris',stars:5,element:'light',cls:'warrior',ml:false,top:false,
+ role:'dps',sets:['speed','crit'],
+ stats:{spd:'mid',crate:'high',cdmg:'high'},
+ notes:'SC Rikoris luz.'},
+
+{id:'carmainerose',name:'Carmainerose',stars:5,element:'fire',cls:'mage',ml:false,top:false,
+ role:'dps',sets:['speed','crit'],
+ stats:{spd:'mid',crate:'high',cdmg:'high',atkp:'high'},
+ notes:'Maga fuego 5★. Burn.'},
+
+{id:'aither-sc',name:'Ainos 2.0',stars:3,element:'dark',cls:'soulweaver',ml:false,top:false,
+ role:'support',sets:['speed','immunity'],
+ stats:{spd:'fast',hpp:'mid',res:'mid'},
+ notes:'Versión mejorada de Ainos.'},
+
 ];
+
 
 // ── SETS INFO ──────────────────────────────────────────────────
 var E7_SETS = {

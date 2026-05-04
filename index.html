@@ -369,19 +369,64 @@ input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appear
 // SUBSTAT DATA
 // ══════════════════════════════════════════════════════════
 var ROLL_COUNT = {0:1,3:2,6:2,9:3,12:4,15:5};
-var PER_ROLL = {
-  spd:  {min:2,  low:3,  good:3.5, max:4,   unit:'',  flat:false},
-  crate:{min:3,  low:4,  good:4,   max:5,   unit:'%', flat:false},
-  cdmg: {min:4,  low:5,  good:6,   max:7,   unit:'%', flat:false},
-  atkp: {min:4,  low:5,  good:6,   max:8,   unit:'%', flat:false},
-  hpp:  {min:4,  low:5,  good:6,   max:8,   unit:'%', flat:false},
-  defp: {min:4,  low:5,  good:6,   max:8,   unit:'%', flat:false},
-  eff:  {min:4,  low:5,  good:6,   max:8,   unit:'%', flat:false},
-  res:  {min:4,  low:5,  good:6,   max:8,   unit:'%', flat:false},
-  atkf: {min:33, low:38, good:42,  max:46,  unit:'',  flat:true},
-  deff: {min:28, low:30, good:32,  max:34,  unit:'',  flat:true},
-  hpf:  {min:158,low:175,good:188, max:201, unit:'',  flat:true}
+// Substat ranges por tier (tabla oficial):
+// T4=Lv45-57 | T5=Lv58-71 | T6=Lv72-85 | T7=Lv88+
+var PER_ROLL_BY_TIER = {
+  T4:{
+    spd:{min:1,low:2,good:2,max:3,unit:'',flat:false},
+    crate:{min:2,low:3,good:3,max:4,unit:'%',flat:false},
+    cdmg:{min:3,low:4,good:4,max:5,unit:'%',flat:false},
+    atkp:{min:3,low:4,good:5,max:6,unit:'%',flat:false},
+    hpp:{min:3,low:4,good:5,max:6,unit:'%',flat:false},
+    defp:{min:3,low:4,good:5,max:6,unit:'%',flat:false},
+    eff:{min:3,low:4,good:5,max:6,unit:'%',flat:false},
+    res:{min:3,low:4,good:5,max:6,unit:'%',flat:false},
+    atkf:{min:20,low:25,good:28,max:30,unit:'',flat:true},
+    deff:{min:16,low:20,good:22,max:24,unit:'',flat:true},
+    hpf:{min:90,low:110,good:125,max:140,unit:'',flat:true}
+  },
+  T5:{
+    spd:{min:1,low:2,good:3,max:4,unit:'',flat:false},
+    crate:{min:2,low:3,good:3,max:4,unit:'%',flat:false},
+    cdmg:{min:3,low:4,good:5,max:6,unit:'%',flat:false},
+    atkp:{min:3,low:4,good:6,max:7,unit:'%',flat:false},
+    hpp:{min:3,low:4,good:6,max:7,unit:'%',flat:false},
+    defp:{min:3,low:4,good:6,max:7,unit:'%',flat:false},
+    eff:{min:3,low:4,good:6,max:7,unit:'%',flat:false},
+    res:{min:3,low:4,good:6,max:7,unit:'%',flat:false},
+    atkf:{min:25,low:30,good:35,max:40,unit:'',flat:true},
+    deff:{min:20,low:24,good:28,max:32,unit:'',flat:true},
+    hpf:{min:120,low:145,good:165,max:185,unit:'',flat:true}
+  },
+  T6:{
+    spd:{min:1,low:2,good:3,max:4,unit:'',flat:false},
+    crate:{min:3,low:4,good:4,max:5,unit:'%',flat:false},
+    cdmg:{min:3,low:5,good:6,max:7,unit:'%',flat:false},
+    atkp:{min:4,low:5,good:6,max:8,unit:'%',flat:false},
+    hpp:{min:4,low:5,good:6,max:8,unit:'%',flat:false},
+    defp:{min:4,low:5,good:6,max:8,unit:'%',flat:false},
+    eff:{min:4,low:5,good:6,max:8,unit:'%',flat:false},
+    res:{min:4,low:5,good:6,max:8,unit:'%',flat:false},
+    atkf:{min:33,low:38,good:42,max:46,unit:'',flat:true},
+    deff:{min:28,low:30,good:32,max:34,unit:'',flat:true},
+    hpf:{min:158,low:175,good:188,max:201,unit:'',flat:true}
+  },
+  T7:{
+    spd:{min:2,low:3,good:4,max:5,unit:'',flat:false},
+    crate:{min:3,low:4,good:5,max:6,unit:'%',flat:false},
+    cdmg:{min:4,low:5,good:6,max:8,unit:'%',flat:false},
+    atkp:{min:5,low:6,good:7,max:9,unit:'%',flat:false},
+    hpp:{min:5,low:6,good:7,max:9,unit:'%',flat:false},
+    defp:{min:5,low:6,good:7,max:9,unit:'%',flat:false},
+    eff:{min:5,low:6,good:7,max:9,unit:'%',flat:false},
+    res:{min:5,low:6,good:7,max:9,unit:'%',flat:false},
+    atkf:{min:40,low:46,good:50,max:56,unit:'',flat:true},
+    deff:{min:34,low:38,good:42,max:46,unit:'',flat:true},
+    hpf:{min:190,low:210,good:230,max:250,unit:'',flat:true}
+  }
 };
+var currentGearTier='T6';
+var PER_ROLL=PER_ROLL_BY_TIER.T6;
 var STAT_OPTS=[
   {id:'none',lbl:'— vacío —'},{id:'spd',lbl:'SPD'},{id:'crate',lbl:'C.Rate %'},
   {id:'cdmg',lbl:'C.Dmg %'},{id:'atkp',lbl:'ATK %'},{id:'hpp',lbl:'HP %'},
@@ -461,8 +506,19 @@ function updateLvBadge(){
   var lv=document.getElementById('gear-level-sel').value;
   var badge=document.getElementById('lv-badge');
   if(!lv){badge.innerHTML='';return;}
-  var info={'72':{cls:'lv-72',txt:'Lv 72',desc:'Nivel bajo'},'78':{cls:'lv-78',txt:'Lv 78',desc:'Historia'},'85':{cls:'lv-85',txt:'Lv 85',desc:'Raid endgame'},'88':{cls:'lv-88',txt:'Lv 88 ⭐',desc:'Historia/tienda'},'90':{cls:'lv-90',txt:'Lv 90 ★',desc:'Ascendido'}}[lv];
+  var MAP={
+    '72':{cls:'lv-72',txt:'Lv 72',desc:'Nivel bajo (T5)',tier:'T5'},
+    '78':{cls:'lv-78',txt:'Lv 78',desc:'Historia (T5)',tier:'T5'},
+    '85':{cls:'lv-85',txt:'Lv 85',desc:'Raid endgame (T6)',tier:'T6'},
+    '88':{cls:'lv-88',txt:'Lv 88 ⭐',desc:'Historia/tienda (T7)',tier:'T7'},
+    '90':{cls:'lv-90',txt:'Lv 90 ★',desc:'Ascendido (T7)',tier:'T7'}
+  };
+  var info=MAP[lv];if(!info)return;
+  // Actualizar tier activo para los cálculos
+  currentGearTier=info.tier;
+  PER_ROLL=PER_ROLL_BY_TIER[info.tier];
   badge.innerHTML='<span class="lv-badge '+info.cls+'">'+info.txt+'</span> <span style="font-size:11px;color:var(--muted)">'+info.desc+'</span>';
+  recalc();
 }
 
 // ══ EVALUATE ══
